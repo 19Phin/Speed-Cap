@@ -1,6 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "speedcap:item/speed_cap"
+    "layer0": "speedcap:item/speed_cap",
+    "layer1": "speedcap:item/speed_cap_overlay"
   }
 }

@@ -16,17 +16,15 @@ import org.joml.Vector3f;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SailModel<T extends LivingEntity> extends HumanoidModel<T> {
+public class CapModel<T extends LivingEntity> extends HumanoidModel<T> {
 
-	public final ModelPart root;
-	public final Map<String, ModelPart> modelParts;
+    private final Map<String, ModelPart> modelParts;
 
-	public SailModel(ModelPart root) {
+	public CapModel(ModelPart root) {
 		super(root, RenderType::entityTranslucent);
 		this.setAllVisible(false);
-		this.root = root;
 
-		this.modelParts = new HashMap<>();
+        this.modelParts = new HashMap<>();
 		this.modelParts.put("hat", root.getChild("hat"));
 		this.modelParts.put("TR", modelParts.get("hat").getChild("TR"));
 		this.modelParts.put("nub", modelParts.get("TR").getChild("nub"));
@@ -56,20 +54,20 @@ public class SailModel<T extends LivingEntity> extends HumanoidModel<T> {
 
 		PartDefinition TR = hat.addOrReplaceChild("TR", CubeListBuilder.create(), PartPose.offset(-5.0F, -9.0F, 0.0F));
 
-		PartDefinition cube_r1 = TR.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(58, 23).mirror().addBox(0.0F, -5.0F, -1.0F, 1.0F, 5.0F, 2.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, -0.7854F));
+		PartDefinition cube_r1 = TR.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(58, 23).addBox(0.0F, -5.0F, -1.0F, 1.0F, 5.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, -0.7854F));
 
 		PartDefinition nub = TR.addOrReplaceChild("nub", CubeListBuilder.create(), PartPose.offset(0.8485F, 0.8485F, 0.0F));
 
-		PartDefinition cube_r2 = nub.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(58, 23).mirror().addBox(0.0F, -1.2F, -1.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, -0.7854F));
+		PartDefinition cube_r2 = nub.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(58, 23).addBox(0.0F, -1.2F, -1.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, -0.7854F));
 
-		PartDefinition fabric2 = TR.addOrReplaceChild("fabric2", CubeListBuilder.create().texOffs(6, 26).mirror().addBox(0.0F, 1.0F, -1.0F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false)
-				.texOffs(2, 22).mirror().addBox(-2.0F, -1.0F, -1.0F, 6.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false)
-				.texOffs(4, 24).mirror().addBox(-1.0F, 0.0F, -1.0F, 4.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-1.0F, -3.0F, 1.0F));
+		PartDefinition fabric2 = TR.addOrReplaceChild("fabric2", CubeListBuilder.create().texOffs(6, 26).addBox(0.0F, 1.0F, -1.0F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
+				.texOffs(2, 22).addBox(-2.0F, -1.0F, -1.0F, 6.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
+				.texOffs(4, 24).addBox(-1.0F, 0.0F, -1.0F, 4.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-1.0F, -3.0F, 1.0F));
 
-		PartDefinition flap3 = TR.addOrReplaceChild("flap3", CubeListBuilder.create().texOffs(10, 26).mirror().addBox(2.0F, 1.0F, -1.0F, 4.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false)
-				.texOffs(8, 27).mirror().addBox(1.0F, 2.0F, -1.0F, 5.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false)
-				.texOffs(14, 22).mirror().addBox(4.0F, -1.0F, -1.0F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false)
-				.texOffs(12, 24).mirror().addBox(3.0F, 0.0F, -1.0F, 3.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-1.0F, -3.0F, 1.0F));
+		PartDefinition flap3 = TR.addOrReplaceChild("flap3", CubeListBuilder.create().texOffs(10, 26).addBox(2.0F, 1.0F, -1.0F, 4.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
+				.texOffs(8, 27).addBox(1.0F, 2.0F, -1.0F, 5.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
+				.texOffs(14, 22).addBox(4.0F, -1.0F, -1.0F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
+				.texOffs(12, 24).addBox(3.0F, 0.0F, -1.0F, 3.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-1.0F, -3.0F, 1.0F));
 
 		PartDefinition TL = hat.addOrReplaceChild("TL", CubeListBuilder.create(), PartPose.offset(5.0F, -9.0F, 0.0F));
 
@@ -106,19 +104,19 @@ public class SailModel<T extends LivingEntity> extends HumanoidModel<T> {
 
 		PartDefinition BR = hat.addOrReplaceChild("BR", CubeListBuilder.create(), PartPose.offset(-5.0F, -4.0F, 0.0F));
 
-		PartDefinition cube_r7 = BR.addOrReplaceChild("cube_r7", CubeListBuilder.create().texOffs(58, 23).mirror().addBox(0.0F, -4.0F, -1.0F, 1.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, -2.3562F));
+		PartDefinition cube_r7 = BR.addOrReplaceChild("cube_r7", CubeListBuilder.create().texOffs(58, 23).addBox(0.0F, -4.0F, -1.0F, 1.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, -2.3562F));
 
 		PartDefinition nub4 = BR.addOrReplaceChild("nub4", CubeListBuilder.create(), PartPose.offset(0.7071F, -0.7071F, 0.0F));
 
-		PartDefinition cube_r8 = nub4.addOrReplaceChild("cube_r8", CubeListBuilder.create().texOffs(58, 23).mirror().addBox(0.0F, -1.0F, -1.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, -2.3562F));
+		PartDefinition cube_r8 = nub4.addOrReplaceChild("cube_r8", CubeListBuilder.create().texOffs(58, 23).addBox(0.0F, -1.0F, -1.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, -2.3562F));
 
-		PartDefinition fabric4 = BR.addOrReplaceChild("fabric4", CubeListBuilder.create().texOffs(4, 29).mirror().addBox(2.0F, -3.0F, 0.0F, 1.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false)
-				.texOffs(0, 27).mirror().addBox(0.0F, -3.0F, 0.0F, 1.0F, 5.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false)
-				.texOffs(2, 28).mirror().addBox(1.0F, -3.0F, 0.0F, 1.0F, 4.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-3.0F, 0.0F, 0.0F));
+		PartDefinition fabric4 = BR.addOrReplaceChild("fabric4", CubeListBuilder.create().texOffs(4, 29).addBox(2.0F, -3.0F, 0.0F, 1.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
+				.texOffs(0, 27).addBox(0.0F, -3.0F, 0.0F, 1.0F, 5.0F, 0.0F, new CubeDeformation(0.0F))
+				.texOffs(2, 28).addBox(1.0F, -3.0F, 0.0F, 1.0F, 4.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-3.0F, 0.0F, 0.0F));
 
-		PartDefinition flap = fabric4.addOrReplaceChild("flap", CubeListBuilder.create().texOffs(4, 26).mirror().addBox(2.0F, -1.0F, 0.0F, 1.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false)
-				.texOffs(2, 24).mirror().addBox(1.0F, -2.0F, 0.0F, 1.0F, 4.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false)
-				.texOffs(0, 22).mirror().addBox(0.0F, -3.0F, 0.0F, 1.0F, 5.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(0.0F, -5.0F, 0.0F));
+		PartDefinition flap = fabric4.addOrReplaceChild("flap", CubeListBuilder.create().texOffs(4, 26).addBox(2.0F, -1.0F, 0.0F, 1.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
+				.texOffs(2, 24).addBox(1.0F, -2.0F, 0.0F, 1.0F, 4.0F, 0.0F, new CubeDeformation(0.0F))
+				.texOffs(0, 22).addBox(0.0F, -3.0F, 0.0F, 1.0F, 5.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -5.0F, 0.0F));
 
 		return LayerDefinition.create(mesh, 64, 32);
 	}
@@ -133,17 +131,17 @@ public class SailModel<T extends LivingEntity> extends HumanoidModel<T> {
 		float localTick = entityMixin.speedcap$getSailTick();
 
 		float tick = Minecraft.getInstance().level.getGameTime() + Minecraft.getInstance().getFrameTime();
-		boolean isSpeeding = ((EntityInterface)livingEntity).speedcap$isSpeeding();
+		boolean isSpeeding = (entityMixin).speedcap$isSpeeding();
 
 		if (isSpeeding != direction) {
 			entityMixin.speedcap$setSailTick(localTick = tick - ((1 - Math.min((tick - localTick) / 10, 1)) * 10));
 			entityMixin.speedcap$setSailDirection(isSpeeding);
 		}
 
-		SailModel.runAnimation(isSpeeding ? ModelAnimations.OPEN : ModelAnimations.CLOSE, modelParts, Math.min((tick - localTick) / 10, 1));
+		CapModel.runAnimation(isSpeeding ? ModelAnimations.OPEN : ModelAnimations.CLOSE, modelParts, Math.min((tick - localTick) / 10, 1));
 	}
 
-	public static void runAnimation(Map<String, KeyframeList> animation, Map<String, ModelPart> parts, float progress) {
+	private static void runAnimation(Map<String, KeyframeList> animation, Map<String, ModelPart> parts, float progress) {
 		for (Map.Entry<String, KeyframeList> entry : animation.entrySet()) {
 			ModelPart part = parts.get(entry.getKey());
 			if (part == null) {

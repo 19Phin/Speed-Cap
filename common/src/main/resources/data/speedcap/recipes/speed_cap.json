@@ -3,8 +3,7 @@
   "category": "equipment",
   "pattern": [
     "/#/",
-    " n ",
-    "rLr"
+    "rnr"
   ],
   "key": {
     "/": {
@@ -18,9 +17,6 @@
     },
     "r": {
       "item": "minecraft:redstone"
-    },
-    "L": {
-      "item": "minecraft:redstone_lamp"
     }
   },
   "result": {

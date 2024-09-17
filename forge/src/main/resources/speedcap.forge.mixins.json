@@ -3,7 +3,8 @@
   "package": "net.dialingspoon.speedcap.forge.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "ItemMixin"
+    "ItemMixin",
+    "PlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

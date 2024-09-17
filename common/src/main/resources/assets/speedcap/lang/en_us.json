@@ -1,6 +1,24 @@
 {
   "item.speedcap.speed_cap": "Speed Cap",
   "key.category.speedcap": "Speed Cap",
-  "key.speedcap.active": "Toggle Cap",
-  "key.speedcap.dime": "Stoponadime"
+  "key.speedcap.speed": "Toggle Speed Cap",
+  "key.speedcap.mine": "Toggle Mining Speed Cap",
+
+
+  "item.speedcap.gui.moveTab": "Movement",
+  "item.speedcap.gui.mineTab": "Mining",
+  "item.speedcap.gui.moveActive": "Active",
+  "item.speedcap.gui.moveActiveDesc": "Toggles movement speed capping",
+  "item.speedcap.gui.modifiable": "Modifiable",
+  "item.speedcap.gui.modifiableDesc": "Allows external forces such as Sprinting or Soul Sand to effect speed\n(May fail to counteract some speed sources)",
+  "item.speedcap.gui.jump": "Jump",
+  "item.speedcap.gui.jumpDesc": "Caps jump speed and, by proxy, height",
+  "item.speedcap.gui.stoponadime": "Stoponadime",
+  "item.speedcap.gui.stoponadimeDesc": "Removes momentum when no input",
+  "item.speedcap.gui.mineActive": "Active",
+  "item.speedcap.gui.mineActiveDesc": "Toggles mining speed capping",
+  "item.speedcap.gui.creative": "Creative",
+  "item.speedcap.gui.creativeDesc": "Retains instamine, while adding a creative-like delay between block breaking",
+  "item.speedcap.gui.bps": "Speed In Blocks per Second",
+  "item.speedcap.gui.reset": "Reset"
 }

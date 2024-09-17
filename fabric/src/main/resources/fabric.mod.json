@@ -22,7 +22,6 @@
       "net.dialingspoon.speedcap.fabric.client.SpeedCapFabricClient"
     ]
   },
-  "accessWidener": "speedcap.accesswidener",
   "mixins": [
     "speedcap.fabric.mixins.json",
     "speedcap.mixins.json"

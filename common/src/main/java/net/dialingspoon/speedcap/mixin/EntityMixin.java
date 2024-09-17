@@ -1,9 +1,7 @@
 package net.dialingspoon.speedcap.mixin;
 
-import net.dialingspoon.speedcap.PlatformSpecific;
+import net.dialingspoon.speedcap.Util;
 import net.dialingspoon.speedcap.interfaces.EntityInterface;
-import net.dialingspoon.speedcap.registry.KeyRegistry;
-import net.dialingspoon.speedcap.registry.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.protocol.game.ClientboundAnimatePacket;
@@ -11,6 +9,8 @@ import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3d;
@@ -23,23 +23,25 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Entity.class)
-public class EntityMixin implements EntityInterface {
-
+public abstract class EntityMixin implements EntityInterface {
     @Shadow
     public Level level() {
         return null;
     }
 
     @Unique
-    private boolean speedcap$speeding = false;
+    private boolean speedcap$moving;
+    @Unique
+    private boolean speedcap$speeding;
+    @Unique
+    private boolean speedcap$couldSpeed;
+    @Unique
+    private long speedcap$localTick;
+    @Unique
+    boolean speedcap$sailDirection;
+    @Unique
+    float speedcap$sailTick;
 
-    @Unique
-    private long speedcap$localTick = 0;
-
-    @Unique
-    boolean speedcap$sailDirection = false;
-    @Unique
-    float speedcap$sailTick = 0;
 
     @Override
     public boolean speedcap$isSpeeding() {
@@ -71,31 +73,50 @@ public class EntityMixin implements EntityInterface {
         speedcap$speeding = bl;
     }
 
+    @Override
+    public void speedcap$couldSpeed(boolean b) {
+        speedcap$couldSpeed = b;
+    }
+
+    @Override
+    public void speedcap$moving(boolean b) {
+        speedcap$moving = b;
+    }
+
     @ModifyVariable(method = "setDeltaMovement(Lnet/minecraft/world/phys/Vec3;)V", at = @At("HEAD"), argsOnly = true)
     private Vec3 slowDown(Vec3 vec3) {
-        boolean isClient = ((Object)this instanceof LocalPlayer);
-        if (this.level() instanceof ServerLevel || isClient) {
-            long gameTime = Minecraft.getInstance().level != null ? Minecraft.getInstance().level.getGameTime() : 0;
-            if (speedcap$localTick != gameTime) {
-                speedcap$speeding = false;
-                speedcap$localTick = gameTime;
-            }
-        }
-
         if ((Object)this instanceof LivingEntity entity) {
-            boolean hasSpeedCap = entity.getSlot(103).get().is(ModItems.SPEEDCAP.get()) || PlatformSpecific.IsInCurios(entity, ModItems.SPEEDCAP.get());
-            if (hasSpeedCap && (!isClient || KeyRegistry.isActive)) {
-                Vector3d modifiedVec = new Vector3d(vec3.x, 0, vec3.z);
+            boolean isClient =  Util.isClientPlayer(entity);
+            if (this.level() instanceof ServerLevel || isClient) {
+                long gameTime = entity.level() != null ? entity.level().getGameTime() : 0;
+                if (speedcap$localTick != gameTime) {
+                    speedcap$speeding = false;
+                    speedcap$localTick = gameTime;
+                }
 
-                if (modifiedVec.length() >= 0.5) {
-                    modifiedVec.normalize().mul(0.5f);
-                    speedcap$speeding = true;
+                ItemStack cap = Util.getActiveCap(entity);
+                if (!cap.isEmpty() && cap.getTag().getBoolean("moveActive")) {
+                    Vector3d modifiedVec = new Vector3d(vec3.x, 0, vec3.z);
+
+                    float f = cap.getTag().getFloat("moveSpeed") / 20.5f;
+                    if (cap.getTag().getBoolean("modifiable")) {
+                        if(speedcap$couldSpeed && speedcap$moving) {
+                            speedcap$speeding = true;
+                        }
+                    }else if (modifiedVec.length() >= f) {
+                        modifiedVec.normalize().mul(f);
+                        speedcap$speeding = true;
+                    }
+
+                    double cappedY = vec3.y;
+                    if (cap.getTag().getBoolean("jump")) {
+                        cappedY = Math.min(vec3.y, .44);
+                        if (vec3.y != cappedY) {
+                            speedcap$speeding = true;
+                        }
+                    }
+                    return new Vec3(modifiedVec.x, cappedY, modifiedVec.z);
                 }
-                double cappedY = Math.min(vec3.y, 0.5);
-                if (vec3.y != cappedY) {
-                    speedcap$speeding = true;
-                }
-                return new Vec3(modifiedVec.x, cappedY, modifiedVec.z);
             }
         }
         return vec3;

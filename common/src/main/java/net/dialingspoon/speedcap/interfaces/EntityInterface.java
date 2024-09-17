@@ -13,4 +13,8 @@ public interface EntityInterface {
     void speedcap$setSailTick(float tick);
 
     void speedcap$setSpeeding(boolean b);
+
+    void speedcap$couldSpeed(boolean b);
+
+    void speedcap$moving(boolean b);
 }

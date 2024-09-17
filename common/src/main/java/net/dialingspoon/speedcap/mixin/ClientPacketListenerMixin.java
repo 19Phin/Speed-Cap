@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 public class ClientPacketListenerMixin {
 
     @Inject(at = @At("TAIL"), method = "handleAnimate", locals = LocalCapture.CAPTURE_FAILHARD)
-    public void sail(ClientboundAnimatePacket arg, CallbackInfo ci, Entity entity) {
+    public void animateSail(ClientboundAnimatePacket arg, CallbackInfo ci, Entity entity) {
         if (entity != null) {
             if (arg.getAction() == 47) {
                 ((EntityInterface)entity).speedcap$setSpeeding(true);

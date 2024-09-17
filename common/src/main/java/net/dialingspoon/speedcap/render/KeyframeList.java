@@ -7,8 +7,6 @@ import java.util.Comparator;
 import java.util.List;
 
 public class KeyframeList {
-
-
     public final List<Keyframe> keyframes;
     public KeyframeList(Keyframe... keyframes) {
         Arrays.sort(keyframes, Comparator.comparing(Keyframe::getStartTime));

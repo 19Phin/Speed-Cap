@@ -4,6 +4,7 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.dialingspoon.speedcap.SpeedCap;
 import net.dialingspoon.speedcap.item.SpeedCapItem;
+import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.CreativeModeTabs;

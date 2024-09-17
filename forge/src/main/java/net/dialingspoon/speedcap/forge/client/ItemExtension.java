@@ -1,6 +1,6 @@
 package net.dialingspoon.speedcap.forge.client;
 
-import net.dialingspoon.speedcap.render.SailModel;
+import net.dialingspoon.speedcap.render.CapModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,7 +17,7 @@ public class ItemExtension implements IClientItemExtensions {
     @Override
     @NotNull
     public HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
-        SailModel<LivingEntity> model = SpeedCapForgeClientEvents.sailModel;
+        CapModel<LivingEntity> model = SpeedCapForgeClientEvents.capModel;
         model.setupAnim(livingEntity);
         return model;
     }

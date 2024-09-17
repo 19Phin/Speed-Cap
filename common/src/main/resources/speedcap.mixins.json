@@ -5,12 +5,15 @@
   "minVersion": "0.8",
   "mixins": [
     "EntityMixin",
-    "LivingEntityMixin"
+    "ItemStackMixin",
+    "LivingEntityMixin",
+    "PlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "client": [
-    "ClientPacketListenerMixin"
+    "ClientPacketListenerMixin",
+    "MenuScreensMixin"
   ]
 }
