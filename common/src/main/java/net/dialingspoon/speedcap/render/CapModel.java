@@ -2,6 +2,9 @@
 // Exported for Minecraft version 1.17 or later with Mojang mappings
 package net.dialingspoon.speedcap.render;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.dialingspoon.speedcap.SpeedCap;
 import net.dialingspoon.speedcap.interfaces.EntityInterface;
 import net.dialingspoon.speedcap.registry.ModItems;
 import net.minecraft.client.Minecraft;
@@ -9,14 +12,21 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.DyeableLeatherItem;
+import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3f;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class CapModel<T extends LivingEntity> extends HumanoidModel<T> {
+	public static final ResourceLocation TEXTURE = new ResourceLocation(SpeedCap.MOD_ID, "textures/models/armor/speed_cap_layer_1.png");
+	public static final ResourceLocation OVERLAY_TEXTURE = new ResourceLocation(SpeedCap.MOD_ID, "textures/models/armor/speed_cap_layer_1_overlay.png");
 
     private final Map<String, ModelPart> modelParts;
 
@@ -121,7 +131,21 @@ public class CapModel<T extends LivingEntity> extends HumanoidModel<T> {
 		return LayerDefinition.create(mesh, 64, 32);
 	}
 
+	public void render(PoseStack matrixStack, MultiBufferSource renderTypeBuffer, ItemStack stack, LivingEntity livingEntity, int light, HumanoidModel<LivingEntity> contextModel) {
+		contextModel.copyPropertiesTo((HumanoidModel<LivingEntity>)this);
 
+		setupAnim(livingEntity);
+		int i = ((DyeableLeatherItem)stack.getItem()).getColor(stack);
+		float f = (float)(i >> 16 & 255) / 255.0F;
+		float f1 = (float)(i >> 8 & 255) / 255.0F;
+		float f2 = (float)(i & 255) / 255.0F;
+
+		VertexConsumer vertexConsumer = renderTypeBuffer.getBuffer(RenderType.armorCutoutNoCull(CapModel.TEXTURE));
+		renderToBuffer(matrixStack, vertexConsumer, light, OverlayTexture.NO_OVERLAY, f, f1, f2, 1.0F);
+		vertexConsumer = renderTypeBuffer.getBuffer(RenderType.armorCutoutNoCull(CapModel.OVERLAY_TEXTURE));
+		renderToBuffer(matrixStack, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 1,1,1, 1.0F);
+		renderToBuffer(matrixStack, renderTypeBuffer.getBuffer(RenderType.armorEntityGlint()), light, OverlayTexture.NO_OVERLAY, 1,1,1, 1.0F);
+	}
 
 	public void setupAnim(LivingEntity livingEntity) {
 		head.visible = livingEntity.getSlot(103).get().isEmpty() || livingEntity.getSlot(103).get().is(ModItems.SPEEDCAP.get());

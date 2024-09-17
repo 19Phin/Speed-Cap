@@ -1,12 +1,8 @@
 package net.dialingspoon.speedcap.mixin;
 
-import dev.architectury.platform.Platform;
-import dev.architectury.utils.EnvExecutor;
 import net.dialingspoon.speedcap.Util;
 import net.dialingspoon.speedcap.interfaces.EntityInterface;
 import net.dialingspoon.speedcap.interfaces.LivingEntityInterface;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;

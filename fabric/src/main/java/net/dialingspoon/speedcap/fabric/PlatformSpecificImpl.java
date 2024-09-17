@@ -2,7 +2,6 @@ package net.dialingspoon.speedcap.fabric;
 
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketsApi;
-import net.dialingspoon.speedcap.registry.ModItems;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;

@@ -1,25 +1,3 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "equipment",
-  "pattern": [
-    "/#/",
-    "rnr"
-  ],
-  "key": {
-    "/": {
-      "item": "minecraft:stick"
-    },
-    "#": {
-      "tag": "wool_carpets"
-    },
-    "n": {
-      "item": "minecraft:iron_helmet"
-    },
-    "r": {
-      "item": "minecraft:redstone"
-    }
-  },
-  "result": {
-    "item": "speedcap:speed_cap"
-  }
+  "type": "speedcap:crafting_special_speedcap"
 }
