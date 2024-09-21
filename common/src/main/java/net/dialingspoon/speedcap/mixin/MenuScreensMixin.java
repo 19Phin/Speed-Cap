@@ -1,7 +1,7 @@
 package net.dialingspoon.speedcap.mixin;
 
+import net.dialingspoon.speedcap.PlatformSpecific;
 import net.dialingspoon.speedcap.gui.SpeedCapScreen;
-import net.dialingspoon.speedcap.registry.ModMenuTypes;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
@@ -21,6 +21,6 @@ public abstract class MenuScreensMixin {
 
     @Inject(method = "<clinit>", at = @At(value = "TAIL"))
     private static void register(CallbackInfo ci) {
-        register(ModMenuTypes.SPEEDCAP.get(), SpeedCapScreen::new);
+        register(PlatformSpecific.getMenu(), SpeedCapScreen::new);
     }
 }

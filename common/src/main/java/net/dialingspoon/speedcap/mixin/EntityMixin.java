@@ -2,15 +2,19 @@ package net.dialingspoon.speedcap.mixin;
 
 import net.dialingspoon.speedcap.Util;
 import net.dialingspoon.speedcap.interfaces.EntityInterface;
-import net.minecraft.network.protocol.game.ClientboundAnimatePacket;
-import net.minecraft.server.level.ServerChunkCache;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3d;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -26,48 +30,30 @@ public abstract class EntityMixin implements EntityInterface {
         return null;
     }
 
+    @Shadow @Final protected SynchedEntityData entityData;
+    private static final EntityDataAccessor<Boolean> DATA_SPEEDING = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.BOOLEAN);
+
     @Unique
     private boolean speedcap$moving;
-    @Unique
-    private boolean speedcap$speeding;
     @Unique
     private boolean speedcap$couldSpeed;
     @Unique
     private long speedcap$localTick;
+
     @Unique
-    boolean speedcap$sailDirection;
+    private ItemStack speedcap$cap;
     @Unique
-    float speedcap$sailTick;
+    private CompoundTag speedcap$data;
 
 
     @Override
     public boolean speedcap$isSpeeding() {
-        return speedcap$speeding;
-    }
-
-    @Override
-    public boolean speedcap$getSailDirection() {
-        return speedcap$sailDirection;
-    }
-
-    @Override
-    public float speedcap$getSailTick() {
-        return speedcap$sailTick;
-    }
-
-    @Override
-    public void speedcap$setSailDirection(boolean direction) {
-        speedcap$sailDirection = direction;
-    }
-
-    @Override
-    public void speedcap$setSailTick(float tick) {
-        speedcap$sailTick = tick;
+        return this.entityData.get(DATA_SPEEDING);
     }
 
     @Override
     public void speedcap$setSpeeding(boolean bl) {
-        speedcap$speeding = bl;
+        this.entityData.set(DATA_SPEEDING, bl);
     }
 
     @Override
@@ -80,6 +66,23 @@ public abstract class EntityMixin implements EntityInterface {
         speedcap$moving = b;
     }
 
+    @Override
+    public CompoundTag getSpeedcap$data() {
+        return this.speedcap$data;
+    }
+    @Override
+    public void setSpeedcap$data(CompoundTag tag) {
+        speedcap$data = tag;
+    }
+    @Override
+    public ItemStack getSpeedcap$capStack() {
+        return this.speedcap$cap;
+    }
+    @Override
+    public void setSpeedcap$capStack(ItemStack stack) {
+        this.speedcap$cap = stack;
+    }
+
     @ModifyVariable(method = "setDeltaMovement(Lnet/minecraft/world/phys/Vec3;)V", at = @At("HEAD"), argsOnly = true)
     private Vec3 slowDown(Vec3 vec3) {
         if ((Object)this instanceof LivingEntity entity) {
@@ -87,29 +90,29 @@ public abstract class EntityMixin implements EntityInterface {
             if (this.level() instanceof ServerLevel || isClient) {
                 long gameTime = entity.level() != null ? entity.level().getGameTime() : 0;
                 if (speedcap$localTick != gameTime) {
-                    speedcap$speeding = false;
+                    speedcap$setSpeeding(false);
                     speedcap$localTick = gameTime;
                 }
 
                 ItemStack cap = Util.getActiveCap(entity);
-                if (!cap.isEmpty() && cap.getTag().getBoolean("moveActive")) {
+                if (!cap.isEmpty() && speedcap$data.getBoolean("moveActive")) {
                     Vector3d modifiedVec = new Vector3d(vec3.x, 0, vec3.z);
 
-                    float f = cap.getTag().getFloat("moveSpeed") / 20.5f;
-                    if (cap.getTag().getBoolean("modifiable")) {
+                    float f = speedcap$data.getFloat("moveSpeed") / 20.5f;
+                    if (speedcap$data.getBoolean("modifiable")) {
                         if(speedcap$couldSpeed && speedcap$moving) {
-                            speedcap$speeding = true;
+                            speedcap$setSpeeding(true);
                         }
                     }else if (modifiedVec.length() >= f) {
                         modifiedVec.normalize().mul(f);
-                        speedcap$speeding = true;
+                        speedcap$setSpeeding(true);
                     }
 
                     double cappedY = vec3.y;
-                    if (cap.getTag().getBoolean("jump")) {
+                    if (speedcap$data.getBoolean("jump")) {
                         cappedY = Math.min(vec3.y, .44);
                         if (vec3.y != cappedY) {
-                            speedcap$speeding = true;
+                            speedcap$setSpeeding(true);
                         }
                     }
                     return new Vec3(modifiedVec.x, cappedY, modifiedVec.z);
@@ -119,13 +122,8 @@ public abstract class EntityMixin implements EntityInterface {
         return vec3;
     }
 
-    @Inject(at = @At(value = "TAIL", ordinal = -2), method = "baseTick")
-    private void broadcastSpeed(CallbackInfo ci) {
-        if (this.level() instanceof ServerLevel) {
-            ClientboundAnimatePacket clientboundanimatepacket = new ClientboundAnimatePacket((Entity) (Object) this, speedcap$speeding ? 47 : 46);
-            ServerChunkCache serverchunkcache = ((ServerLevel) this.level()).getChunkSource();
-            serverchunkcache.broadcast((Entity) (Object) this, clientboundanimatepacket);
-        }
+    @Inject(at = @At(value = "RETURN"), method = "<init>")
+    private void SyncSpeeding(EntityType entityType, Level level, CallbackInfo ci) {
+        this.entityData.define(DATA_SPEEDING, false);
     }
-
 }

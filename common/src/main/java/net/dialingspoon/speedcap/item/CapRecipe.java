@@ -3,8 +3,7 @@
  */
 package net.dialingspoon.speedcap.item;
 
-import net.dialingspoon.speedcap.registry.ModItems;
-import net.dialingspoon.speedcap.registry.ModRecipes;
+import net.dialingspoon.speedcap.PlatformSpecific;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
@@ -70,7 +69,7 @@ public class CapRecipe extends CustomRecipe {
     @Override
     public ItemStack assemble(CraftingContainer recipeInputInventory, RegistryAccess wrapperLookup) {
         ItemStack carpet = recipeInputInventory.getItems().stream().filter(m -> m.is(ItemTags.WOOL_CARPETS)).findFirst().get();
-        ItemStack cap = new ItemStack(ModItems.SPEEDCAP.get());
+        ItemStack cap = new ItemStack(PlatformSpecific.getItem());
 
         float[] textureDiffuseColors = ((WoolCarpetBlock)((BlockItem)carpet.getItem()).getBlock()).getColor().getTextureDiffuseColors();
 
@@ -80,7 +79,7 @@ public class CapRecipe extends CustomRecipe {
 
         int color = (r << 16) | (g << 8) | b;
 
-        ((SpeedCapItem)ModItems.SPEEDCAP.get()).setColor(cap, color);
+        ((SpeedCapItem)PlatformSpecific.getItem()).setColor(cap, color);
         return cap;
     }
 
@@ -91,7 +90,7 @@ public class CapRecipe extends CustomRecipe {
 
     @Override
     public RecipeSerializer<CapRecipe> getSerializer() {
-        return ModRecipes.CAP_RECIPE.get();
+        return PlatformSpecific.getRecipeSerializer();
     }
 }
 

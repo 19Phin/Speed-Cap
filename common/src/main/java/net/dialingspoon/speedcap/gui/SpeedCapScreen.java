@@ -2,8 +2,8 @@ package net.dialingspoon.speedcap.gui;
 
 import com.google.common.collect.Lists;
 import io.netty.buffer.Unpooled;
+import net.dialingspoon.speedcap.PlatformSpecific;
 import net.dialingspoon.speedcap.SpeedCap;
-import net.dialingspoon.speedcap.networking.Packets;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -54,7 +54,7 @@ public class SpeedCapScreen extends AbstractContainerScreen<SpeedCapMenu> {
     }
 
     private void initControls() {
-        CompoundTag tag = this.getMenu().getCap().getTag();
+        CompoundTag tag = this.getMenu().getCap().getTag().getCompound("SpeedCap");
 
         addWidget(new CapResetButton(this.leftPos + 100, this.topPos - 19, Component.translatable("item.speedcap.gui.reset")));
 
@@ -117,12 +117,12 @@ public class SpeedCapScreen extends AbstractContainerScreen<SpeedCapMenu> {
     public void onClose() {
         FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
         for (CapSlider slider : sliderWidgets) {
-            buf.writeFloat(slider.getSpeed() + .5f);
+            buf.writeFloat(slider.getSpeed() - .5f);
         }
         for (CapScreenButton button : buttonWidgets) {
             buf.writeBoolean(button.isSelected());
         }
-        Packets.sendToServer(buf);
+        PlatformSpecific.sendToServer(buf);
         super.onClose();
     }
 
@@ -192,7 +192,7 @@ public class SpeedCapScreen extends AbstractContainerScreen<SpeedCapMenu> {
 
         public CapSlider(int x, int y, float speed, boolean movementRelated) {
             super(x, y, 50, 20, Component.literal(String.format("%.1f", speed)), getFirstValue(speed));
-            this.speed = speed - .5f;
+            this.speed = speed + .5f;
             this.movementRelated = movementRelated;
             this.setTooltip(Tooltip.create(Component.translatable("item.speedcap.gui.bps")));
         }
@@ -205,7 +205,7 @@ public class SpeedCapScreen extends AbstractContainerScreen<SpeedCapMenu> {
 
         @Override
         protected void updateMessage() {
-            this.setMessage(Component.literal(String.format("%.1f", getSpeed() + .5f)));
+            this.setMessage(Component.literal(String.valueOf(Math.max(Float.parseFloat(String.format("%.1f", speed - .5f)), 0.1f))));
         }
 
         @Override
@@ -221,12 +221,11 @@ public class SpeedCapScreen extends AbstractContainerScreen<SpeedCapMenu> {
                 moving = 0;
             }
 
-            speed = ((int) getSpeed()) + change;
-            speed = Math.max(getSpeed(), -0.4f);
+            speed = ((int) speed) + change;
         }
 
         public void reset() {
-            speed = movementRelated ? 4.3f :  4.0f;
+            speed = movementRelated ? 5.3f :  5.0f;
             value = movementRelated ? .3 : 0;
             moving = 0;
             updateMessage();
@@ -234,8 +233,11 @@ public class SpeedCapScreen extends AbstractContainerScreen<SpeedCapMenu> {
 
         public void onRelease() {
             if (moving != 0) {
-                value = 0.5;
                 moving = 0;
+            }
+            if (speed <= 0.4f) {
+                value = 0.6f;
+                speed = 0.4f;
             }
         }
 
@@ -257,8 +259,8 @@ public class SpeedCapScreen extends AbstractContainerScreen<SpeedCapMenu> {
             tick++;
             if (tick >= 10) {
                 tick = 0;
-                if (moving != -1 || getSpeed() >= 0f) {
-                    speed = getSpeed() + moving;
+                if (moving != -1 || speed >= 0f) {
+                    speed += moving;
                     updateMessage();
                 }
             }

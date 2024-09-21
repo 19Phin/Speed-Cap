@@ -1,12 +1,12 @@
 // Made with Blockbench 4.10.4
 // Exported for Minecraft version 1.17 or later with Mojang mappings
-package net.dialingspoon.speedcap.render;
+package net.dialingspoon.speedcap.models;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.dialingspoon.speedcap.PlatformSpecific;
 import net.dialingspoon.speedcap.SpeedCap;
-import net.dialingspoon.speedcap.interfaces.EntityInterface;
-import net.dialingspoon.speedcap.registry.ModItems;
+import net.dialingspoon.speedcap.interfaces.LivingEntityInterface;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -148,21 +148,13 @@ public class CapModel<T extends LivingEntity> extends HumanoidModel<T> {
 	}
 
 	public void setupAnim(LivingEntity livingEntity) {
-		head.visible = livingEntity.getSlot(103).get().isEmpty() || livingEntity.getSlot(103).get().is(ModItems.SPEEDCAP.get());
-
-		EntityInterface entityMixin = (EntityInterface) livingEntity;
-		boolean direction = entityMixin.speedcap$getSailDirection();
-		float localTick = entityMixin.speedcap$getSailTick();
+		head.visible = livingEntity.getSlot(103).get().isEmpty() || livingEntity.getSlot(103).get().is(PlatformSpecific.getItem());
 
 		float tick = Minecraft.getInstance().level.getGameTime() + Minecraft.getInstance().getFrameTime();
-		boolean isSpeeding = (entityMixin).speedcap$isSpeeding();
+		LivingEntityInterface livingEntityMixin = (LivingEntityInterface)livingEntity;
 
-		if (isSpeeding != direction) {
-			entityMixin.speedcap$setSailTick(localTick = tick - ((1 - Math.min((tick - localTick) / 10, 1)) * 10));
-			entityMixin.speedcap$setSailDirection(isSpeeding);
-		}
-
-		CapModel.runAnimation(isSpeeding ? ModelAnimations.OPEN : ModelAnimations.CLOSE, modelParts, Math.min((tick - localTick) / 10, 1));
+		CapModel.runAnimation(livingEntityMixin.speedcap$sailDirection() ? ModelAnimations.OPEN : ModelAnimations.CLOSE, modelParts,
+				Math.min((tick - livingEntityMixin.speedcap$getSailTick()) / 10, 1));
 	}
 
 	private static void runAnimation(Map<String, KeyframeList> animation, Map<String, ModelPart> parts, float progress) {

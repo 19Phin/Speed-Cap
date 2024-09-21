@@ -1,6 +1,6 @@
-package net.dialingspoon.speedcap.render;
+package net.dialingspoon.speedcap.models;
 
-import net.dialingspoon.speedcap.render.KeyframeList.Type;
+import net.dialingspoon.speedcap.models.KeyframeList.Type;
 import org.joml.Vector3f;
 
 import java.util.HashMap;

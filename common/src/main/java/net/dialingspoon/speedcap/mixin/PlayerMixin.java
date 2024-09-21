@@ -26,13 +26,13 @@ public class PlayerMixin {
         if (player.level() instanceof ServerLevel || Util.isClientPlayer(player)) {
             long gameTime = player.level().getGameTime();
             if (speedcap$localTick != gameTime) {
-                ((EntityInterface) this).speedcap$couldSpeed(false);
+                ((EntityInterface) player).speedcap$couldSpeed(false);
                 speedcap$localTick = gameTime;
             }
         }
 
         AttributeInstance movementAttribute = player.getAttribute(attribute);
-        AttributeModifier sprintModifier = ((LivingEntityInterface)this).getSPEED_MODIFIER_SPRINTING();
+        AttributeModifier sprintModifier = ((LivingEntityInterface)player).getSPEED_MODIFIER_SPRINTING();
         double speed = movementAttribute.getValue();
 
         boolean isSprinting = movementAttribute.hasModifier(sprintModifier);
@@ -41,11 +41,11 @@ public class PlayerMixin {
         }
 
         ItemStack cap = Util.getActiveCap(player);
-        if (!cap.isEmpty() && cap.getTag().getBoolean("moveActive") && cap.getTag().getBoolean("modifiable")) {
-            float maxSpeed = cap.getTag().getFloat("moveSpeed") / 44f;
+        if (!cap.isEmpty() && ((EntityInterface) player).getSpeedcap$data().getBoolean("moveActive") && ((EntityInterface) player).getSpeedcap$data().getBoolean("modifiable")) {
+            float maxSpeed = ((EntityInterface) player).getSpeedcap$data().getFloat("moveSpeed") / 44f;
             if (speed > maxSpeed) {
                 speed = maxSpeed;
-                ((EntityInterface) this).speedcap$couldSpeed(true);
+                ((EntityInterface) player).speedcap$couldSpeed(true);
             }
         }
 

@@ -1,6 +1,7 @@
 package net.dialingspoon.speedcap.forge.mixin;
 
 import net.dialingspoon.speedcap.Util;
+import net.dialingspoon.speedcap.interfaces.EntityInterface;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -16,8 +17,8 @@ public class PlayerMixin {
     @Inject(method = "getDigSpeed", at = @At(value = "RETURN"), cancellable = true, remap = false)
     private void slowDestroy(BlockState arg, BlockPos pos, CallbackInfoReturnable<Float> cir) {
         ItemStack cap = Util.getActiveCap((Player)(Object)this);
-        if (!cap.isEmpty() && cap.getTag().getBoolean("mineActive") && !cap.getTag().getBoolean("creative")) {
-            cir.setReturnValue(Math.min(cir.getReturnValue(), cap.getTag().getFloat("mineSpeed")));
+        if (!cap.isEmpty() && ((EntityInterface) this).getSpeedcap$data().getBoolean("mineActive") && !((EntityInterface) this).getSpeedcap$data().getBoolean("creative")) {
+            cir.setReturnValue(Math.min(cir.getReturnValue(), ((EntityInterface) this).getSpeedcap$data().getFloat("mineSpeed")));
         }
     }
 }

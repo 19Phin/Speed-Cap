@@ -1,4 +1,4 @@
-package net.dialingspoon.speedcap.render;
+package net.dialingspoon.speedcap.models;
 
 import org.joml.Vector3f;
 

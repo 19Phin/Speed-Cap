@@ -1,4 +1,4 @@
-package net.dialingspoon.speedcap.registry;
+package net.dialingspoon.speedcap.item;
 
 import net.dialingspoon.speedcap.SpeedCap;
 import net.minecraft.sounds.SoundEvent;

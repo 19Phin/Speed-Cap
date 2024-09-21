@@ -20,7 +20,7 @@ public class CurioRenderer implements ICurioRenderer {
         M model = renderLayerParent.getModel();
         if (model instanceof HumanoidModel<?>) {
             HumanoidModel<LivingEntity> humanoidModel = (HumanoidModel<LivingEntity>)model;
-            SpeedCapForgeClientEvents.capModel.render(matrixStack, renderTypeBuffer, stack, slotContext.entity(), light, humanoidModel);
+            SpeedCapForgeClientEvents.ClientModBusEvents.capModel.render(matrixStack, renderTypeBuffer, stack, slotContext.entity(), light, humanoidModel);
         }
     }
 }

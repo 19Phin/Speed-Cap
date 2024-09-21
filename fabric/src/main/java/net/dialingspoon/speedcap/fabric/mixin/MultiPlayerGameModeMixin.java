@@ -1,6 +1,7 @@
 package net.dialingspoon.speedcap.fabric.mixin;
 
 import net.dialingspoon.speedcap.Util;
+import net.dialingspoon.speedcap.interfaces.EntityInterface;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.core.BlockPos;
@@ -27,8 +28,8 @@ public class MultiPlayerGameModeMixin {
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;getDestroyProgress(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)F"), method = "method_41930")
     public void delayDestroy(BlockState blockState, BlockPos blockPos, Direction direction, int i, CallbackInfoReturnable<Packet> cir) {
         ItemStack cap = Util.getActiveCap(minecraft.player);
-        if (!cap.isEmpty() && cap.getTag().getBoolean("mineActive") && cap.getTag().getBoolean("creative")) {
-            destroyDelay = (int)((1 / cap.getTag().getFloat("mineSpeed")) * 20);
+        if (!cap.isEmpty() && ((EntityInterface) minecraft.player).getSpeedcap$data().getBoolean("mineActive") && ((EntityInterface) minecraft.player).getSpeedcap$data().getBoolean("creative")) {
+            destroyDelay = (int)((1 / ((EntityInterface) minecraft.player).getSpeedcap$data().getFloat("mineSpeed")) * 20);
         }
     }
 }

@@ -1,8 +1,9 @@
 package net.dialingspoon.speedcap;
 
-import dev.architectury.utils.EnvExecutor;
-import net.dialingspoon.speedcap.registry.ModItems;
-import net.minecraft.client.player.LocalPlayer;
+import net.dialingspoon.speedcap.interfaces.EntityInterface;
+import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -13,12 +14,32 @@ public class Util {
         ItemStack head = entity.getSlot(103).get();
         ItemStack item = ItemStack.EMPTY;
 
-        if (head.is(ModItems.SPEEDCAP.get())) {
+        if (head.is(PlatformSpecific.getItem())) {
             item = head;
         } else {
-            ItemStack curiosItem = PlatformSpecific.getItemFromModdedSlots(entity, ModItems.SPEEDCAP.get());
+            ItemStack curiosItem = PlatformSpecific.getItemFromModdedSlots(entity, PlatformSpecific.getItem());
             if (curiosItem != null && !curiosItem.isEmpty()) {
                 item = curiosItem;
+            }
+        }
+
+        if (item != null) {
+            EntityInterface entityInterface = (EntityInterface) entity;
+            if (entityInterface.getSpeedcap$capStack() != item) {
+                entityInterface.setSpeedcap$capStack(item);
+                if (!item.getOrCreateTag().contains("SpeedCap")) {
+                    CompoundTag tag = new CompoundTag();
+                    tag.putFloat("moveSpeed", 4.8f);
+                    tag.putFloat("mineSpeed", 4);
+                    tag.putBoolean("moveActive", true);
+                    tag.putBoolean("modifiable", false);
+                    tag.putBoolean("jump", true);
+                    tag.putBoolean("stoponadime", false);
+                    tag.putBoolean("mineActive", true);
+                    tag.putBoolean("creative", true);
+                    item.getTag().put("SpeedCap", tag);
+                }
+                entityInterface.setSpeedcap$data((CompoundTag) item.getOrCreateTag().get("SpeedCap"));
             }
         }
 
@@ -27,10 +48,7 @@ public class Util {
 
     public static boolean isClientPlayer(LivingEntity entity) {
         if (entity instanceof Player player) {
-            return EnvExecutor.getEnvSpecific(
-                    () -> () -> player instanceof LocalPlayer,
-                    () -> () -> false
-            );
+            return player.equals(Minecraft.getInstance().player);
         }
         return false;
     }
