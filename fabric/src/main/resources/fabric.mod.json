@@ -12,7 +12,7 @@
     "sources": "https://github.com/FabricMC/fabric-example-mod"
   },
   "license": "Mit",
-  "icon": "assets/speedcap/icon.png",
+  "icon": "icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -28,7 +28,7 @@
   ],
   "depends": {
     "fabricloader": ">=0.16.2",
-    "minecraft": "~1.20.1",
+    "minecraft": ">=1.20.3 <1.20.5",
     "java": ">=17",
     "fabric-api": "*"
   },

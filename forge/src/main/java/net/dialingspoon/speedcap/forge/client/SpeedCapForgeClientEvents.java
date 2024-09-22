@@ -21,25 +21,27 @@ import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+@SuppressWarnings("unused")
 public class SpeedCapForgeClientEvents {
     @Mod.EventBusSubscriber(modid = SpeedCap.MOD_ID, value = Dist.CLIENT)
     public static class ClientForgeEvents {
         @SubscribeEvent
-        public static void onKeyInput(InputEvent.Key event) {
+        public static void onKey(InputEvent.Key event) {
             if (ModKeys.TOGGLE_SPEED.consumeClick()) {
                 ItemStack cap = Util.getActiveCap(Minecraft.getInstance().player);
                 if (!cap.isEmpty()) {
-                    ((EntityInterface) Minecraft.getInstance().player).getSpeedcap$data().putBoolean("moveActive", !((EntityInterface) Minecraft.getInstance().player).getSpeedcap$data().getBoolean("moveActive"));
+                    ((EntityInterface) Minecraft.getInstance().player).speedcap$getData().putBoolean("moveActive", !((EntityInterface) Minecraft.getInstance().player).speedcap$getData().getBoolean("moveActive"));
                 }
             }
             if (ModKeys.TOGGLE_MINE.consumeClick()) {
                 ItemStack cap = Util.getActiveCap(Minecraft.getInstance().player);
                 if (!cap.isEmpty()) {
-                    ((EntityInterface) Minecraft.getInstance().player).getSpeedcap$data().putBoolean("mineActive", ((EntityInterface) Minecraft.getInstance().player).getSpeedcap$data().getBoolean("mineActive"));
+                    ((EntityInterface) Minecraft.getInstance().player).speedcap$getData().putBoolean("mineActive", ((EntityInterface) Minecraft.getInstance().player).speedcap$getData().getBoolean("mineActive"));
                 }
             }
         }
     }
+
 
     @Mod.EventBusSubscriber(modid = SpeedCap.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class ClientModBusEvents {
@@ -58,12 +60,12 @@ public class SpeedCapForgeClientEvents {
         }
 
         @SubscribeEvent
-        public static void registerColors(RegisterColorHandlersEvent.Item event) {
+        public static void initColors(RegisterColorHandlersEvent.Item event) {
             event.register((itemStack, layer) -> layer > 0 ? -1 : ((SpeedCapItem) itemStack.getItem()).getColor(itemStack), ModItems.SPEEDCAP.get());
         }
 
         @SubscribeEvent
-        public static void onKeyRegister(RegisterKeyMappingsEvent event) {
+        public static void initKeys(RegisterKeyMappingsEvent event) {
             event.register(ModKeys.TOGGLE_SPEED);
             event.register(ModKeys.TOGGLE_MINE);
         }

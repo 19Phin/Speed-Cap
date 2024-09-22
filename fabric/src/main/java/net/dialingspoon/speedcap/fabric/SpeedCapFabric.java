@@ -16,7 +16,6 @@ public final class SpeedCapFabric implements ModInitializer {
         ModMenuTypes.register();
         ModRecipes.register();
         Packets.registerPackets();
-        Packets.registerPackets();
         trinketsLoaded = FabricLoader.getInstance().isModLoaded("trinkets");
         SpeedCap.init();
     }

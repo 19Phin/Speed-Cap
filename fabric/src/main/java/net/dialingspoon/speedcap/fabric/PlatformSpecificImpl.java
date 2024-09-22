@@ -19,10 +19,10 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import java.util.List;
 
 public class PlatformSpecificImpl {
-    public static ItemStack getItemFromModdedSlots(LivingEntity livingEntity, Item item) {
+    public static ItemStack getItemFromModdedSlots(LivingEntity livingEntity) {
         if (SpeedCapFabric.trinketsLoaded) {
             if (TrinketsApi.getTrinketComponent(livingEntity).isPresent()) {
-                List<Tuple<SlotReference, ItemStack>> stacks = TrinketsApi.getTrinketComponent(livingEntity).get().getEquipped(item);
+                List<Tuple<SlotReference, ItemStack>> stacks = TrinketsApi.getTrinketComponent(livingEntity).get().getEquipped(ModItems.SPEEDCAP);
                 if (!stacks.isEmpty()) return stacks.get(0).getB();
             }
         }

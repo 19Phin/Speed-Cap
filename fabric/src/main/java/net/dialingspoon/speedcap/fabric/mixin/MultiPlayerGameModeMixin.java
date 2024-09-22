@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,7 +19,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MultiPlayerGameMode.class)
 public class MultiPlayerGameModeMixin {
-
     @Shadow
     private int destroyDelay;
 
@@ -28,8 +28,9 @@ public class MultiPlayerGameModeMixin {
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;getDestroyProgress(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)F"), method = "method_41930")
     public void delayDestroy(BlockState blockState, BlockPos blockPos, Direction direction, int i, CallbackInfoReturnable<Packet> cir) {
         ItemStack cap = Util.getActiveCap(minecraft.player);
-        if (!cap.isEmpty() && ((EntityInterface) minecraft.player).getSpeedcap$data().getBoolean("mineActive") && ((EntityInterface) minecraft.player).getSpeedcap$data().getBoolean("creative")) {
-            destroyDelay = (int)((1 / ((EntityInterface) minecraft.player).getSpeedcap$data().getFloat("mineSpeed")) * 20);
+        CompoundTag data = ((EntityInterface) minecraft.player).speedcap$getData();
+        if (!cap.isEmpty() && data.getBoolean("mineActive") && data.getBoolean("creative")) {
+            destroyDelay = (int)((1 / data.getFloat("mineSpeed")) * 20);
         }
     }
 }
