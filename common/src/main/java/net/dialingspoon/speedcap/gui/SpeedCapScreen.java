@@ -23,6 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
@@ -54,7 +55,7 @@ public class SpeedCapScreen extends AbstractContainerScreen<SpeedCapMenu> {
     }
 
     private void initControls() {
-        CompoundTag tag = this.getMenu().getCap().getTag().getCompound("SpeedCap");
+        CompoundTag tag = getOrCreateTag(this.getMenu().getCap());
 
         addWidget(new CapResetButton(this.leftPos + 100, this.topPos - 19, Component.translatable("item.speedcap.gui.reset")));
 
@@ -70,6 +71,22 @@ public class SpeedCapScreen extends AbstractContainerScreen<SpeedCapMenu> {
         addWidget(new CapScreenButton(this.leftPos + 95, this.topPos + 54, Component.translatable("item.speedcap.gui.creative"), tag.getBoolean("creative"), false, Component.translatable("item.speedcap.gui.creativeDesc")));
 
         updateVisibility();
+    }
+
+    private CompoundTag getOrCreateTag(ItemStack item) {
+        if (!item.getOrCreateTag().contains("SpeedCap")) {
+            CompoundTag tag = new CompoundTag();
+            tag.putFloat("moveSpeed", 4.8f);
+            tag.putFloat("mineSpeed", 4);
+            tag.putBoolean("moveActive", true);
+            tag.putBoolean("modifiable", false);
+            tag.putBoolean("jump", true);
+            tag.putBoolean("stoponadime", false);
+            tag.putBoolean("mineActive", true);
+            tag.putBoolean("creative", true);
+            item.getTag().put("SpeedCap", tag);
+        }
+        return item.getTag().getCompound("SpeedCap");
     }
 
     private void addWidget(AbstractWidget widget) {
@@ -117,7 +134,7 @@ public class SpeedCapScreen extends AbstractContainerScreen<SpeedCapMenu> {
     public void onClose() {
         FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
         for (CapSlider slider : sliderWidgets) {
-            buf.writeFloat(slider.getSpeed() - .5f);
+            buf.writeFloat(Math.max(slider.getSpeed() - .5f, 0.1f));
         }
         for (CapScreenButton button : buttonWidgets) {
             buf.writeBoolean(button.isSelected());
@@ -146,7 +163,7 @@ public class SpeedCapScreen extends AbstractContainerScreen<SpeedCapMenu> {
 
     interface VisibilityToggleable {
         boolean isMovementRelated();
-        default void setVisible(boolean visible) {};
+        default void setVisible(boolean visible) {}
     }
 
 
@@ -182,6 +199,7 @@ public class SpeedCapScreen extends AbstractContainerScreen<SpeedCapMenu> {
             return movementRelated;
         }
     }
+
 
     @Environment(value=EnvType.CLIENT)
     static class CapSlider extends AbstractSliderButton implements VisibilityToggleable {

@@ -7,7 +7,6 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
@@ -52,19 +51,16 @@ public enum ModMaterials implements ArmorMaterial {
     }
 
     @Override
-    @NotNull
     public SoundEvent getEquipSound() {
         return this.soundEvent;
     }
 
     @Override
-    @NotNull
     public Ingredient getRepairIngredient() {
         return this.repairMaterial.get();
     }
 
     @Override
-    @NotNull
     public String getName() {
         return SpeedCap.MOD_ID + ":" + this.name;
     }

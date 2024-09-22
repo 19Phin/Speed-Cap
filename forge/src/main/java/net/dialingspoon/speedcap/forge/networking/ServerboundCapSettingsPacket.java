@@ -1,10 +1,8 @@
 package net.dialingspoon.speedcap.forge.networking;
 
-import net.dialingspoon.speedcap.SpeedCap;
 import net.dialingspoon.speedcap.forge.registry.ModItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
@@ -13,7 +11,6 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class ServerboundCapSettingsPacket {
-    public static final ResourceLocation ID = new ResourceLocation(SpeedCap.MOD_ID, "cap_menu");
     private final float mineSpeed;
     private final float moveSpeed;
     private final boolean moveActive;
@@ -45,7 +42,7 @@ public class ServerboundCapSettingsPacket {
         buf.writeBoolean(creative);
     }
 
-    public boolean handle(Supplier<NetworkEvent.Context> supplier) {
+    public void handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             ServerPlayer player = context.getSender();
@@ -64,6 +61,5 @@ public class ServerboundCapSettingsPacket {
             tag.putBoolean("mineActive", mineActive);
             tag.putBoolean("creative", creative);
         });
-        return true;
     }
 }

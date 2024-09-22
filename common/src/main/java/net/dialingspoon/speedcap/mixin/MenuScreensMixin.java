@@ -15,7 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MenuScreens.class)
 public abstract class MenuScreensMixin {
-
     @Shadow
     private static <M extends AbstractContainerMenu, U extends Screen & MenuAccess<M>> void register(MenuType<? extends M> arg, MenuScreens.ScreenConstructor<M, U> arg2) {}
 

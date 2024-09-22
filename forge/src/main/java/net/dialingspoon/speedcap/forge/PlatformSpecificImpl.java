@@ -20,10 +20,10 @@ import top.theillusivec4.curios.api.SlotResult;
 import java.util.List;
 
 public class PlatformSpecificImpl {
-    public static ItemStack getItemFromModdedSlots(LivingEntity livingEntity, Item item) {
+    public static ItemStack getItemFromModdedSlots(LivingEntity livingEntity) {
         if (SpeedCapForge.curiosLoaded) {
             if (CuriosApi.getCuriosInventory(livingEntity).isPresent()) {
-                List<SlotResult> stacks = CuriosApi.getCuriosInventory(livingEntity).resolve().get().findCurios(item);
+                List<SlotResult> stacks = CuriosApi.getCuriosInventory(livingEntity).resolve().get().findCurios(ModItems.SPEEDCAP.get());
                 if (!stacks.isEmpty()) return stacks.get(0).stack();
             }
         }

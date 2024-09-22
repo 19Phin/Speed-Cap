@@ -3,7 +3,7 @@ package net.dialingspoon.speedcap;
 import net.dialingspoon.speedcap.interfaces.EntityInterface;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -17,7 +17,7 @@ public class Util {
         if (head.is(PlatformSpecific.getItem())) {
             item = head;
         } else {
-            ItemStack curiosItem = PlatformSpecific.getItemFromModdedSlots(entity, PlatformSpecific.getItem());
+            ItemStack curiosItem = PlatformSpecific.getItemFromModdedSlots(entity);
             if (curiosItem != null && !curiosItem.isEmpty()) {
                 item = curiosItem;
             }
@@ -25,8 +25,9 @@ public class Util {
 
         if (item != null) {
             EntityInterface entityInterface = (EntityInterface) entity;
-            if (entityInterface.getSpeedcap$capStack() != item) {
-                entityInterface.setSpeedcap$capStack(item);
+            if (entityInterface.speedcap$getCapStack() != item) {
+                entityInterface.speedcap$setCapStack(item);
+
                 if (!item.getOrCreateTag().contains("SpeedCap")) {
                     CompoundTag tag = new CompoundTag();
                     tag.putFloat("moveSpeed", 4.8f);
@@ -39,14 +40,18 @@ public class Util {
                     tag.putBoolean("creative", true);
                     item.getTag().put("SpeedCap", tag);
                 }
-                entityInterface.setSpeedcap$data((CompoundTag) item.getOrCreateTag().get("SpeedCap"));
+
+                entityInterface.speedcap$setData(item.getOrCreateTag().getCompound("SpeedCap"));
             }
         }
 
         return item;
     }
 
-    public static boolean isClientPlayer(LivingEntity entity) {
+    public static boolean shouldHandleSelf(LivingEntity entity) {
+        if (entity.level() instanceof ServerLevel) {
+            return true;
+        }
         if (entity instanceof Player player) {
             return player.equals(Minecraft.getInstance().player);
         }

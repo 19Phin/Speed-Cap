@@ -142,9 +142,12 @@ public class CapModel<T extends LivingEntity> extends HumanoidModel<T> {
 
 		VertexConsumer vertexConsumer = renderTypeBuffer.getBuffer(RenderType.armorCutoutNoCull(CapModel.TEXTURE));
 		renderToBuffer(matrixStack, vertexConsumer, light, OverlayTexture.NO_OVERLAY, f, f1, f2, 1.0F);
+
 		vertexConsumer = renderTypeBuffer.getBuffer(RenderType.armorCutoutNoCull(CapModel.OVERLAY_TEXTURE));
 		renderToBuffer(matrixStack, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 1,1,1, 1.0F);
-		renderToBuffer(matrixStack, renderTypeBuffer.getBuffer(RenderType.armorEntityGlint()), light, OverlayTexture.NO_OVERLAY, 1,1,1, 1.0F);
+
+		vertexConsumer = renderTypeBuffer.getBuffer(RenderType.armorEntityGlint());
+		renderToBuffer(matrixStack, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 1,1,1, 1.0F);
 	}
 
 	public void setupAnim(LivingEntity livingEntity) {
@@ -164,33 +167,30 @@ public class CapModel<T extends LivingEntity> extends HumanoidModel<T> {
 				throw new IllegalArgumentException("ModelPart \"" + entry.getKey() + "\" not found");
 			}
 
-			KeyframeList.Keyframe pos1 = null, pos2 = null;
-			KeyframeList.Keyframe rot1 = null, rot2 = null;
-			KeyframeList.Keyframe sca1 = null, sca2 = null;
-
-			for (KeyframeList.Keyframe frame : entry.getValue().keyframes) {
-				switch (frame.getType()) {
-					case POSITION:
-						if (pos2 != null) break;
-						pos1 = pos1 == null || progress >= frame.getStartTime() ? frame : pos1;
-						pos2 = progress < frame.getStartTime() ? frame : null;
-						break;
-					case ROTATION:
-						if (rot2 != null) break;
-						rot1 = rot1 == null || progress >= frame.getStartTime() ? frame : rot1;
-						rot2 = progress < frame.getStartTime() ? frame : null;
-						break;
-					case SCALE:
-						if (sca2 != null) break;
-						sca1 = sca1 == null || progress >= frame.getStartTime() ? frame : sca1;
-						sca2 = progress < frame.getStartTime() ? frame : null;
-						break;
-				}
+			KeyframeList.Keyframe kf1, kf2;
+			kf1 = kf2 = null;
+			for (KeyframeList.Keyframe frame : entry.getValue().positionKeyframes) {
+				if (kf2 != null) break;
+				kf1 = (kf1 == null || progress >= frame.getStartTime()) ? frame : kf1;
+				kf2 = progress < frame.getStartTime() ? frame : null;
 			}
+			applyInterpolation(part, progress, kf1, kf2, KeyframeList.Type.POSITION);
 
-			applyInterpolation(part, progress, pos1, pos2, KeyframeList.Type.POSITION);
-			applyInterpolation(part, progress, rot1, rot2, KeyframeList.Type.ROTATION);
-			applyInterpolation(part, progress, sca1, sca2, KeyframeList.Type.SCALE);
+			kf1 = kf2 = null;
+			for (KeyframeList.Keyframe frame : entry.getValue().rotationKeyframes) {
+				if (kf2 != null) break;
+				kf1 = (kf1 == null || progress >= frame.getStartTime()) ? frame : kf1;
+				kf2 = progress < frame.getStartTime() ? frame : null;
+			}
+			applyInterpolation(part, progress, kf1, kf2, KeyframeList.Type.ROTATION);
+
+			kf1 = kf2 = null;
+			for (KeyframeList.Keyframe frame : entry.getValue().scaleKeyframes) {
+				if (kf2 != null) break;
+				kf1 = (kf1 == null || progress >= frame.getStartTime()) ? frame : kf1;
+				kf2 = progress < frame.getStartTime() ? frame : null;
+			}
+			applyInterpolation(part, progress, kf1, kf2, KeyframeList.Type.SCALE);
 		}
 	}
 

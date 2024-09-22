@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.2.2 (FabricMC 7c48b8c4).
- */
 package net.dialingspoon.speedcap.item;
 
 import net.dialingspoon.speedcap.PlatformSpecific;
@@ -20,12 +17,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.WoolCarpetBlock;
 
 public class CapRecipe extends CustomRecipe {
-    static final NonNullList<Ingredient> recipeItems;
-
+    static final NonNullList<Ingredient> recipeItems = NonNullList.withSize(6, Ingredient.EMPTY);
     static {
-        recipeItems = NonNullList.withSize(6, Ingredient.EMPTY);
         recipeItems.set(0, Ingredient.of(Items.STICK));
-        recipeItems.set(1, Ingredient.of(ItemTags.WOOL_CARPETS));
+        reloadCarpetTag();
         recipeItems.set(2, Ingredient.of(Items.STICK));
         recipeItems.set(3, Ingredient.of(Items.REDSTONE));
         recipeItems.set(4, Ingredient.of(Items.IRON_HELMET));
@@ -38,6 +33,7 @@ public class CapRecipe extends CustomRecipe {
 
     @Override
     public boolean matches(CraftingContainer craftingContainer, Level arg2) {
+        reloadCarpetTag();
         for (int i = 0; i <= craftingContainer.getWidth() - 3; ++i) {
             for (int j = 0; j <= craftingContainer.getHeight() - 2; ++j) {
                 if (this.matches(craftingContainer, i, j, true)) {
@@ -92,7 +88,8 @@ public class CapRecipe extends CustomRecipe {
     public RecipeSerializer<CapRecipe> getSerializer() {
         return PlatformSpecific.getRecipeSerializer();
     }
+
+    public static void reloadCarpetTag() {
+        recipeItems.set(1, Ingredient.of(ItemTags.WOOL_CARPETS));
+    }
 }
-
-
-

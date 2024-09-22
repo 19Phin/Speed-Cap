@@ -11,7 +11,7 @@ authors = "DialingSpoon"
 description = '''
 Cap your speed
 '''
-#logoFile = ""
+logoFile = "icon.png"
 
 [[dependencies.speedcap]]
 modId = "forge"

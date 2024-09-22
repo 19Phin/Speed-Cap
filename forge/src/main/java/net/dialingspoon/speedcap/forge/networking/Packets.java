@@ -14,7 +14,6 @@ public class Packets {
         return packetId++;
     }
 
-
     public static void registerPackets() {
         SimpleChannel net = NetworkRegistry.ChannelBuilder
                 .named(new ResourceLocation(SpeedCap.MOD_ID, "messages"))

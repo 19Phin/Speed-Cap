@@ -14,15 +14,14 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
 
 public final class SpeedCapFabricClient implements ClientModInitializer {
-    public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(SpeedCap.MOD_ID, "speedcap"), "main");
+    public static final ModelLayerLocation CAP_LAYER = new ModelLayerLocation(new ResourceLocation(SpeedCap.MOD_ID, "speedcap"), "main");
 
     @Override
     public void onInitializeClient() {
         LayerDefinitionsAccessor deformationGetter = ((LayerDefinitionsAccessor)new LayerDefinitions());
-        EntityModelLayerRegistry.registerModelLayer(LAYER, () -> CapModel.createLayer(deformationGetter.getOUTER_ARMOR_DEFORMATION()));
+        EntityModelLayerRegistry.registerModelLayer(CAP_LAYER, () -> CapModel.createLayer(deformationGetter.getOUTER_ARMOR_DEFORMATION()));
 
         ArmorRenderer.register(new Renderer(), ModItems.SPEEDCAP);
         if (SpeedCapFabric.trinketsLoaded) {
