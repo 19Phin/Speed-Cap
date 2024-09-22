@@ -12,7 +12,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 
 public class PlatformSpecific {
     @ExpectPlatform
-    public static ItemStack getItemFromModdedSlots(LivingEntity livingEntity, Item item) {
+    public static ItemStack getItemFromModdedSlots(LivingEntity livingEntity) {
         throw new AssertionError();
     }
 

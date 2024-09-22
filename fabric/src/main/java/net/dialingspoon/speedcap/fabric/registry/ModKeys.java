@@ -6,7 +6,6 @@ import net.dialingspoon.speedcap.interfaces.EntityInterface;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.ItemStack;
 import org.lwjgl.glfw.GLFW;
 
@@ -21,7 +20,7 @@ public class ModKeys {
             while (ModKeys.TOGGLE_SPEED.consumeClick()) {
                 ItemStack cap = Util.getActiveCap(minecraft.player);
                 if (!cap.isEmpty()) {
-                    ((EntityInterface) minecraft.player).getSpeedcap$data().putBoolean("moveActive", !((EntityInterface) minecraft.player).getSpeedcap$data().getBoolean("moveActive"));
+                    ((EntityInterface) minecraft.player).speedcap$getData().putBoolean("moveActive", !((EntityInterface) minecraft.player).speedcap$getData().getBoolean("moveActive"));
                 }
             }
         });
@@ -30,7 +29,7 @@ public class ModKeys {
             while (ModKeys.TOGGLE_MINE.consumeClick()) {
                 ItemStack cap = Util.getActiveCap(minecraft.player);
                 if (!cap.isEmpty()) {
-                    ((EntityInterface) minecraft.player).getSpeedcap$data().putBoolean("mineActive", ((EntityInterface) minecraft.player).getSpeedcap$data().getBoolean("mineActive"));
+                    ((EntityInterface) minecraft.player).speedcap$getData().putBoolean("mineActive", ((EntityInterface) minecraft.player).speedcap$getData().getBoolean("mineActive"));
                 }
             }
         });

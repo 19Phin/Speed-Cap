@@ -7,7 +7,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.SimpleMenuProvider;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.DyeableArmorItem;
@@ -41,19 +40,11 @@ public class SpeedCapItem extends DyeableArmorItem {
         return 16777215;
     }
 
-    @Override
-    public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean isInMainHand) {
-        if (slot == 103) {
-
-        }
-    }
-
     /**
      *This @Overrides Item.initializeClient(Consumer<IClientItemExtensions>) through type-erasure shenanigans.
      */
-    @PlatformOnly(PlatformOnly.FORGE)
+    @PlatformOnly({PlatformOnly.FORGE, "neoforge"})
     public void initializeClient(Consumer<Object> consumer) {
         consumer.accept(PlatformSpecific.itemExtension());
     }
-
 }

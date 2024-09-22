@@ -2,26 +2,20 @@ package net.dialingspoon.speedcap.forge.networking;
 
 import net.dialingspoon.speedcap.SpeedCap;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.network.*;
 
 public class Packets {
     private static SimpleChannel INSTANCE;
+
+    public static final int PROTOCOL_VERSION = 1;
 
     private static int packetId = 0;
     private static int id() {
         return packetId++;
     }
 
-
     public static void registerPackets() {
-        SimpleChannel net = NetworkRegistry.ChannelBuilder
-                .named(new ResourceLocation(SpeedCap.MOD_ID, "messages"))
-                .networkProtocolVersion(() -> "1.0")
-                .clientAcceptedVersions(s -> true)
-                .serverAcceptedVersions(s -> true)
-                .simpleChannel();
+        SimpleChannel net = ChannelBuilder.named(new ResourceLocation(SpeedCap.MOD_ID, "main")).networkProtocolVersion(PROTOCOL_VERSION).acceptedVersions(Channel.VersionTest.exact(PROTOCOL_VERSION)).simpleChannel();
 
         INSTANCE = net;
         net.messageBuilder(ServerboundCapSettingsPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
@@ -32,6 +26,6 @@ public class Packets {
     }
 
     public static <MSG> void sendToServer(MSG message) {
-        INSTANCE.sendToServer(message);
+        INSTANCE.send(message, PacketDistributor.SERVER.noArg());
     }
 }

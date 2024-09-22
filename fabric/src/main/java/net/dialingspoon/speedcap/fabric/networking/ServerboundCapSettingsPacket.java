@@ -32,5 +32,4 @@ public class ServerboundCapSettingsPacket {
         tag.putBoolean("mineActive", buf.readBoolean());
         tag.putBoolean("creative", buf.readBoolean());
     }
-
 }

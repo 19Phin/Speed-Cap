@@ -6,7 +6,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -30,9 +29,11 @@ public abstract class EntityMixin implements EntityInterface {
         return null;
     }
 
-    @Shadow @Final protected SynchedEntityData entityData;
+    @Shadow 
+    @Final protected SynchedEntityData entityData;
+    @Unique
     private static final EntityDataAccessor<Boolean> DATA_SPEEDING = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.BOOLEAN);
-
+    
     @Unique
     private boolean speedcap$moving;
     @Unique
@@ -45,49 +46,47 @@ public abstract class EntityMixin implements EntityInterface {
     @Unique
     private CompoundTag speedcap$data;
 
-
     @Override
     public boolean speedcap$isSpeeding() {
         return this.entityData.get(DATA_SPEEDING);
     }
-
-    @Override
+    @Unique
     public void speedcap$setSpeeding(boolean bl) {
         this.entityData.set(DATA_SPEEDING, bl);
-    }
-
-    @Override
-    public void speedcap$couldSpeed(boolean b) {
-        speedcap$couldSpeed = b;
     }
 
     @Override
     public void speedcap$moving(boolean b) {
         speedcap$moving = b;
     }
+    @Override
+    public void speedcap$couldSpeed(boolean b) {
+        speedcap$couldSpeed = b;
+    }
 
     @Override
-    public CompoundTag getSpeedcap$data() {
-        return this.speedcap$data;
-    }
-    @Override
-    public void setSpeedcap$data(CompoundTag tag) {
+    public void speedcap$setData(CompoundTag tag) {
         speedcap$data = tag;
     }
     @Override
-    public ItemStack getSpeedcap$capStack() {
-        return this.speedcap$cap;
+    public CompoundTag speedcap$getData() {
+        return this.speedcap$data;
     }
     @Override
-    public void setSpeedcap$capStack(ItemStack stack) {
+    public void speedcap$setCapStack(ItemStack stack) {
         this.speedcap$cap = stack;
     }
+    @Override
+    public ItemStack speedcap$getCapStack() {
+        return this.speedcap$cap;
+    }
+
 
     @ModifyVariable(method = "setDeltaMovement(Lnet/minecraft/world/phys/Vec3;)V", at = @At("HEAD"), argsOnly = true)
     private Vec3 slowDown(Vec3 vec3) {
         if ((Object)this instanceof LivingEntity entity) {
-            boolean isClient =  Util.isClientPlayer(entity);
-            if (this.level() instanceof ServerLevel || isClient) {
+
+            if (Util.shouldHandleSelf(entity)) {
                 long gameTime = entity.level() != null ? entity.level().getGameTime() : 0;
                 if (speedcap$localTick != gameTime) {
                     speedcap$setSpeeding(false);
@@ -103,7 +102,8 @@ public abstract class EntityMixin implements EntityInterface {
                         if(speedcap$couldSpeed && speedcap$moving) {
                             speedcap$setSpeeding(true);
                         }
-                    }else if (modifiedVec.length() >= f) {
+
+                    } else if (modifiedVec.length() >= f) {
                         modifiedVec.normalize().mul(f);
                         speedcap$setSpeeding(true);
                     }
@@ -123,7 +123,7 @@ public abstract class EntityMixin implements EntityInterface {
     }
 
     @Inject(at = @At(value = "RETURN"), method = "<init>")
-    private void SyncSpeeding(EntityType entityType, Level level, CallbackInfo ci) {
+    private void syncSpeeding(EntityType entityType, Level level, CallbackInfo ci) {
         this.entityData.define(DATA_SPEEDING, false);
     }
 }

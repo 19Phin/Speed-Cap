@@ -7,17 +7,15 @@ public interface EntityInterface {
 
     boolean speedcap$isSpeeding();
 
-    void speedcap$setSpeeding(boolean b);
-
     void speedcap$couldSpeed(boolean b);
 
     void speedcap$moving(boolean b);
 
-    CompoundTag getSpeedcap$data();
+    CompoundTag speedcap$getData();
 
-    void setSpeedcap$data(CompoundTag tag);
+    void speedcap$setData(CompoundTag tag);
 
-    ItemStack getSpeedcap$capStack();
+    ItemStack speedcap$getCapStack();
 
-    void setSpeedcap$capStack(ItemStack stack);
+    void speedcap$setCapStack(ItemStack stack);
 }
