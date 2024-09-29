@@ -42,13 +42,8 @@ public class ModCreativeTabs {
 
     private static ItemStack createColoredCap(DyeColor color) {
         ItemStack cap = new ItemStack(ModItems.SPEEDCAP.get());
-        float[] textureDiffuseColors = color.getTextureDiffuseColors();
+        int colorhash = color.getTextureDiffuseColor();
 
-        int r = (int) (textureDiffuseColors[0] * 255.0F);
-        int g = (int) (textureDiffuseColors[1] * 255.0F);
-        int b = (int) (textureDiffuseColors[2] * 255.0F);
-
-        int colorhash = (r << 16) | (g << 8) | b;
         cap.set(DataComponents.DYED_COLOR, new DyedItemColor(colorhash, true));
         return cap;
     }

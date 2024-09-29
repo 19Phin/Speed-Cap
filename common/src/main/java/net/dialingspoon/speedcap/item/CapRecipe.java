@@ -10,10 +10,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.DyedItemColor;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
-import net.minecraft.world.item.crafting.CustomRecipe;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.WoolCarpetBlock;
 
@@ -33,30 +30,30 @@ public class CapRecipe extends CustomRecipe {
     }
 
     @Override
-    public boolean matches(CraftingContainer craftingContainer, Level arg2) {
+    public boolean matches(CraftingInput recipeInput, Level level) {
         reloadCarpetTag();
-        for (int i = 0; i <= craftingContainer.getWidth() - 3; ++i) {
-            for (int j = 0; j <= craftingContainer.getHeight() - 2; ++j) {
-                if (this.matches(craftingContainer, i, j, true)) {
+        for (int i = 0; i <= recipeInput.width() - 3; ++i) {
+            for (int j = 0; j <= recipeInput.height() - 2; ++j) {
+                if (this.matches(recipeInput, i, j, true)) {
                     return true;
                 }
-                if (!this.matches(craftingContainer, i, j, false)) continue;
+                if (!this.matches(recipeInput, i, j, false)) continue;
                 return true;
             }
         }
         return false;
     }
 
-    private boolean matches(CraftingContainer craftingContainer, int m, int n, boolean bl) {
-        for (int i = 0; i < craftingContainer.getWidth(); ++i) {
-            for (int j = 0; j < craftingContainer.getHeight(); ++j) {
+    private boolean matches(CraftingInput recipeInput, int m, int n, boolean bl) {
+        for (int i = 0; i < recipeInput.width(); ++i) {
+            for (int j = 0; j < recipeInput.height(); ++j) {
                 int k = i - m;
                 int l = j - n;
                 Ingredient ingredient = Ingredient.EMPTY;
                 if (k >= 0 && l >= 0 && k < 3 && l < 2) {
                     ingredient = bl ? recipeItems.get(3 - k - 1 + l * 3) : recipeItems.get(k + l * 3);
                 }
-                if (ingredient.test(craftingContainer.getItem(i + j * craftingContainer.getWidth()))) continue;
+                if (ingredient.test(recipeInput.getItem(i + j * recipeInput.width()))) continue;
                 return false;
             }
         }
@@ -64,17 +61,11 @@ public class CapRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer recipeInputInventory, HolderLookup.Provider provider) {
-        ItemStack carpet = recipeInputInventory.getItems().stream().filter(m -> m.is(ItemTags.WOOL_CARPETS)).findFirst().get();
+    public ItemStack assemble(CraftingInput recipeInput, HolderLookup.Provider provider) {
+        ItemStack carpet = recipeInput.items().stream().filter(m -> m.is(ItemTags.WOOL_CARPETS)).findFirst().get();
         ItemStack cap = new ItemStack(PlatformSpecific.getItem());
 
-        float[] textureDiffuseColors = ((WoolCarpetBlock)((BlockItem)carpet.getItem()).getBlock()).getColor().getTextureDiffuseColors();
-
-        int r = (int) (textureDiffuseColors[0] * 255.0F);
-        int g = (int) (textureDiffuseColors[1] * 255.0F);
-        int b = (int) (textureDiffuseColors[2] * 255.0F);
-
-        int color = (r << 16) | (g << 8) | b;
+        int color = ((WoolCarpetBlock)((BlockItem)carpet.getItem()).getBlock()).getColor().getTextureDiffuseColor();
 
         cap.set(DataComponents.DYED_COLOR, new DyedItemColor(color, true));
         return cap;

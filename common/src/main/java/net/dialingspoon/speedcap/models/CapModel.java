@@ -10,15 +10,21 @@ import net.dialingspoon.speedcap.interfaces.LivingEntityInterface;
 import net.dialingspoon.speedcap.item.SpeedCapItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.armortrim.ArmorTrim;
 import net.minecraft.world.item.component.DyedItemColor;
 import org.joml.Vector3f;
 
@@ -136,25 +142,22 @@ public class CapModel<T extends LivingEntity> extends HumanoidModel<T> {
 		contextModel.copyPropertiesTo((HumanoidModel<LivingEntity>)this);
 
 		setupAnim(livingEntity);
-		int i = DyedItemColor.getOrDefault(stack, SpeedCapItem.DEFAULT_COLOR);
-		float f = (float)(i >> 16 & 255) / 255.0F;
-		float f1 = (float)(i >> 8 & 255) / 255.0F;
-		float f2 = (float)(i & 255) / 255.0F;
+		int color = DyedItemColor.getOrDefault(stack, SpeedCapItem.DEFAULT_COLOR);
 
 		VertexConsumer vertexConsumer = renderTypeBuffer.getBuffer(RenderType.armorCutoutNoCull(CapModel.TEXTURE));
-		renderToBuffer(matrixStack, vertexConsumer, light, OverlayTexture.NO_OVERLAY, f, f1, f2, 1.0F);
+		renderToBuffer(matrixStack, vertexConsumer, light, OverlayTexture.NO_OVERLAY, color);
 
 		vertexConsumer = renderTypeBuffer.getBuffer(RenderType.armorCutoutNoCull(CapModel.OVERLAY_TEXTURE));
-		renderToBuffer(matrixStack, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 1,1,1, 1.0F);
+		renderToBuffer(matrixStack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
 
 		vertexConsumer = renderTypeBuffer.getBuffer(RenderType.armorEntityGlint());
-		renderToBuffer(matrixStack, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 1,1,1, 1.0F);
+		renderToBuffer(matrixStack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
 	}
 
 	public void setupAnim(LivingEntity livingEntity) {
 		head.visible = livingEntity.getSlot(103).get().isEmpty() || livingEntity.getSlot(103).get().is(PlatformSpecific.getItem());
 
-		float tick = Minecraft.getInstance().level.getGameTime() + Minecraft.getInstance().getFrameTime();
+		float tick = Minecraft.getInstance().level.getGameTime() + Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(true);
 		LivingEntityInterface livingEntityMixin = (LivingEntityInterface)livingEntity;
 
 		CapModel.runAnimation(livingEntityMixin.speedcap$sailDirection() ? ModelAnimations.OPEN : ModelAnimations.CLOSE, modelParts,

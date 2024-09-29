@@ -23,7 +23,7 @@ public class PlayerMixin {
         AttributeModifier sprintModifier = ((LivingEntityInterface)player).getSPEED_MODIFIER_SPRINTING();
         double speed = movementAttribute.getValue();
 
-        boolean isSprinting = movementAttribute.hasModifier(sprintModifier);
+        boolean isSprinting = movementAttribute.hasModifier(sprintModifier.id());
         if (isSprinting) {
             speed /= 1.0 + sprintModifier.amount();
         }
