@@ -15,7 +15,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record CapKeybindPacket(boolean move) implements CustomPacketPayload {
 
-    public static final Type<CapKeybindPacket> TYPE = new Type<>(new ResourceLocation(SpeedCap.MOD_ID, "cap_key"));
+    public static final Type<CapKeybindPacket> TYPE = new Type<>(ResourceLocation.tryBuild(SpeedCap.MOD_ID, "cap_key"));
 
     public static final StreamCodec<ByteBuf, CapKeybindPacket> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.BOOL,

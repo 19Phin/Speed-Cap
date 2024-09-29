@@ -1,6 +1,7 @@
 package net.dialingspoon.speedcap.neoforge.networking;
 
 import io.netty.buffer.ByteBuf;
+import net.dialingspoon.speedcap.SpeedCap;
 import net.dialingspoon.speedcap.item.CapSettingsComponent;
 import net.dialingspoon.speedcap.neoforge.registry.ModDataComponents;
 import net.dialingspoon.speedcap.neoforge.registry.ModItems;
@@ -15,7 +16,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record ServerboundCapSettingsPacket(float moveSpeed, float mineSpeed, boolean moveActive, boolean modifiable,
                                            boolean jump, boolean stoponadime, boolean mineActive, boolean creative) implements CustomPacketPayload {
-    public static final Type<ServerboundCapSettingsPacket> TYPE = new Type<>(new ResourceLocation("mymod", "cap_menu"));
+    public static final Type<ServerboundCapSettingsPacket> TYPE = new Type<>(ResourceLocation.tryBuild(SpeedCap.MOD_ID, "cap_menu"));
 
     public static final StreamCodec<ByteBuf, ServerboundCapSettingsPacket> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.FLOAT,
@@ -58,7 +59,7 @@ public record ServerboundCapSettingsPacket(float moveSpeed, float mineSpeed, boo
             cap = player.getItemInHand(InteractionHand.OFF_HAND);
             if (!cap.is(ModItems.SPEEDCAP.get())) return;
         }
-        cap.set(ModDataComponents.SPEEDCAP_DATA, new CapSettingsComponent(mineSpeed, moveSpeed, moveActive, modifiable, jump, stoponadime, mineActive, creative));
+        cap.set(ModDataComponents.SPEEDCAP_DATA, new CapSettingsComponent(moveSpeed, mineSpeed, moveActive, modifiable, jump, stoponadime, mineActive, creative));
     }
 
     @Override

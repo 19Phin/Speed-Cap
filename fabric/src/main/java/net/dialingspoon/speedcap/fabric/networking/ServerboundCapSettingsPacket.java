@@ -1,6 +1,7 @@
 package net.dialingspoon.speedcap.fabric.networking;
 
 import io.netty.buffer.ByteBuf;
+import net.dialingspoon.speedcap.SpeedCap;
 import net.dialingspoon.speedcap.fabric.registry.ModDataComponents;
 import net.dialingspoon.speedcap.fabric.registry.ModItems;
 import net.dialingspoon.speedcap.item.CapSettingsComponent;
@@ -16,7 +17,7 @@ import net.minecraft.world.item.ItemStack;
 public record ServerboundCapSettingsPacket(float moveSpeed, float mineSpeed, boolean moveActive, boolean modifiable,
                                            boolean jump, boolean stoponadime, boolean mineActive, boolean creative) implements CustomPacketPayload {
 
-    public static final Type<ServerboundCapSettingsPacket> TYPE = new Type<>(new ResourceLocation("mymod", "cap_menu"));
+    public static final Type<ServerboundCapSettingsPacket> TYPE = new Type<>(ResourceLocation.tryBuild(SpeedCap.MOD_ID, "cap_menu"));
 
     public static final StreamCodec<ByteBuf, ServerboundCapSettingsPacket> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.FLOAT,
