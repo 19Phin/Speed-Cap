@@ -2,7 +2,8 @@ package net.dialingspoon.speedcap.fabric.registry;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.dialingspoon.speedcap.Util;
-import net.dialingspoon.speedcap.interfaces.EntityInterface;
+import net.dialingspoon.speedcap.fabric.networking.CapKeybindPacket;
+import net.dialingspoon.speedcap.fabric.networking.Packets;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
@@ -20,7 +21,7 @@ public class ModKeys {
             while (ModKeys.TOGGLE_SPEED.consumeClick()) {
                 ItemStack cap = Util.getActiveCap(minecraft.player);
                 if (!cap.isEmpty()) {
-                    ((EntityInterface) minecraft.player).speedcap$getData().putBoolean("moveActive", !((EntityInterface) minecraft.player).speedcap$getData().getBoolean("moveActive"));
+                    Packets.sendToServer(new CapKeybindPacket(true));
                 }
             }
         });
@@ -29,7 +30,7 @@ public class ModKeys {
             while (ModKeys.TOGGLE_MINE.consumeClick()) {
                 ItemStack cap = Util.getActiveCap(minecraft.player);
                 if (!cap.isEmpty()) {
-                    ((EntityInterface) minecraft.player).speedcap$getData().putBoolean("mineActive", ((EntityInterface) minecraft.player).speedcap$getData().getBoolean("mineActive"));
+                    Packets.sendToServer(new CapKeybindPacket(false));
                 }
             }
         });

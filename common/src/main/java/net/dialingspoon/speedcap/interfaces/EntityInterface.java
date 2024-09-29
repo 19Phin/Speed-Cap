@@ -1,6 +1,6 @@
 package net.dialingspoon.speedcap.interfaces;
 
-import net.minecraft.nbt.CompoundTag;
+import net.dialingspoon.speedcap.item.CapSettingsComponent;
 import net.minecraft.world.item.ItemStack;
 
 public interface EntityInterface {
@@ -11,9 +11,9 @@ public interface EntityInterface {
 
     void speedcap$moving(boolean b);
 
-    CompoundTag speedcap$getData();
+    CapSettingsComponent speedcap$getData();
 
-    void speedcap$setData(CompoundTag tag);
+    void speedcap$setData(CapSettingsComponent settings);
 
     ItemStack speedcap$getCapStack();
 

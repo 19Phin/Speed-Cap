@@ -3,7 +3,8 @@ package net.dialingspoon.speedcap;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.dialingspoon.speedcap.gui.SpeedCapMenu;
 import net.dialingspoon.speedcap.item.CapRecipe;
-import net.minecraft.network.FriendlyByteBuf;
+import net.dialingspoon.speedcap.item.CapSettingsComponent;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
@@ -22,7 +23,8 @@ public class PlatformSpecific {
     }
 
     @ExpectPlatform
-    public static void sendToServer(FriendlyByteBuf buf) {
+    public static void sendToServer(float moveSpeed, float mineSpeed, boolean moveActive, boolean modifiable,
+                                    boolean jump, boolean stoponadime, boolean mineActive, boolean creative) {
         throw new AssertionError();
     }
 
@@ -38,6 +40,11 @@ public class PlatformSpecific {
 
     @ExpectPlatform
     public static RecipeSerializer<CapRecipe> getRecipeSerializer() {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static DataComponentType<CapSettingsComponent> getDataComponent() {
         throw new AssertionError();
     }
 }

@@ -1,9 +1,9 @@
 package net.dialingspoon.speedcap.gui;
 
 import com.google.common.collect.Lists;
-import io.netty.buffer.Unpooled;
 import net.dialingspoon.speedcap.PlatformSpecific;
 import net.dialingspoon.speedcap.SpeedCap;
+import net.dialingspoon.speedcap.item.CapSettingsComponent;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -15,21 +15,19 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
 @Environment(value=EnvType.CLIENT)
 public class SpeedCapScreen extends AbstractContainerScreen<SpeedCapMenu> {
-    private static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(SpeedCap.MOD_ID,"textures/gui/cap_menu.png");
+    private static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.tryBuild(SpeedCap.MOD_ID,"textures/gui/cap_menu.png");
     private static final List<CapSlider> sliderWidgets = Lists.newArrayList();
     private static final List<CapScreenButton> buttonWidgets = Lists.newArrayList();
     private static CapResetButton resetWidget;
@@ -55,38 +53,22 @@ public class SpeedCapScreen extends AbstractContainerScreen<SpeedCapMenu> {
     }
 
     private void initControls() {
-        CompoundTag tag = getOrCreateTag(this.getMenu().getCap());
+        CapSettingsComponent settings = this.getMenu().getCap().get(PlatformSpecific.getDataComponent());
 
         addWidget(new CapResetButton(this.leftPos + 100, this.topPos - 19, Component.translatable("item.speedcap.gui.reset")));
 
-        addWidget(new CapSlider(this.leftPos + this.imageWidth/2 - 26, this.topPos - 18, tag.getFloat("moveSpeed"), true));
-        addWidget(new CapSlider(this.leftPos + this.imageWidth/2 - 26, this.topPos - 18, tag.getFloat("mineSpeed"), false));
+        addWidget(new CapSlider(this.leftPos + this.imageWidth/2 - 26, this.topPos - 18, settings.moveSpeed(), true));
+        addWidget(new CapSlider(this.leftPos + this.imageWidth/2 - 26, this.topPos - 18, settings.mineSpeed(), false));
 
-        addWidget(new CapScreenButton(this.leftPos + 35, this.topPos + 28, Component.translatable("item.speedcap.gui.moveActive"), tag.getBoolean("moveActive"), true, Component.translatable("item.speedcap.gui.moveActiveDesc")));
-        addWidget(new CapScreenButton(this.leftPos + 95, this.topPos + 28, Component.translatable("item.speedcap.gui.modifiable"), tag.getBoolean("modifiable"), true, Component.translatable("item.speedcap.gui.modifiableDesc")));
-        addWidget(new CapScreenButton(this.leftPos + 35, this.topPos + 80, Component.translatable("item.speedcap.gui.jump"), tag.getBoolean("jump"), true, Component.translatable("item.speedcap.gui.jumpDesc")));
-        addWidget(new CapScreenButton(this.leftPos + 95, this.topPos + 80, Component.translatable("item.speedcap.gui.stoponadime"), tag.getBoolean("stoponadime"), true, Component.translatable("item.speedcap.gui.stoponadimeDesc")));
+        addWidget(new CapScreenButton(this.leftPos + 35, this.topPos + 28, Component.translatable("item.speedcap.gui.moveActive"), settings.moveActive(), true, Component.translatable("item.speedcap.gui.moveActiveDesc")));
+        addWidget(new CapScreenButton(this.leftPos + 95, this.topPos + 28, Component.translatable("item.speedcap.gui.modifiable"), settings.modifiable(), true, Component.translatable("item.speedcap.gui.modifiableDesc")));
+        addWidget(new CapScreenButton(this.leftPos + 35, this.topPos + 80, Component.translatable("item.speedcap.gui.jump"), settings.jump(), true, Component.translatable("item.speedcap.gui.jumpDesc")));
+        addWidget(new CapScreenButton(this.leftPos + 95, this.topPos + 80, Component.translatable("item.speedcap.gui.stoponadime"), settings.stoponadime(), true, Component.translatable("item.speedcap.gui.stoponadimeDesc")));
 
-        addWidget(new CapScreenButton(this.leftPos + 35, this.topPos + 54, Component.translatable("item.speedcap.gui.mineActive"), tag.getBoolean("mineActive"), false, Component.translatable("item.speedcap.gui.mineActiveDesc")));
-        addWidget(new CapScreenButton(this.leftPos + 95, this.topPos + 54, Component.translatable("item.speedcap.gui.creative"), tag.getBoolean("creative"), false, Component.translatable("item.speedcap.gui.creativeDesc")));
+        addWidget(new CapScreenButton(this.leftPos + 35, this.topPos + 54, Component.translatable("item.speedcap.gui.mineActive"), settings.mineActive(), false, Component.translatable("item.speedcap.gui.mineActiveDesc")));
+        addWidget(new CapScreenButton(this.leftPos + 95, this.topPos + 54, Component.translatable("item.speedcap.gui.creative"), settings.creative(), false, Component.translatable("item.speedcap.gui.creativeDesc")));
 
         updateVisibility();
-    }
-
-    private CompoundTag getOrCreateTag(ItemStack item) {
-        if (!item.getOrCreateTag().contains("SpeedCap")) {
-            CompoundTag tag = new CompoundTag();
-            tag.putFloat("moveSpeed", 4.8f);
-            tag.putFloat("mineSpeed", 4);
-            tag.putBoolean("moveActive", true);
-            tag.putBoolean("modifiable", false);
-            tag.putBoolean("jump", true);
-            tag.putBoolean("stoponadime", false);
-            tag.putBoolean("mineActive", true);
-            tag.putBoolean("creative", true);
-            item.getTag().put("SpeedCap", tag);
-        }
-        return item.getTag().getCompound("SpeedCap");
     }
 
     private void addWidget(AbstractWidget widget) {
@@ -132,14 +114,9 @@ public class SpeedCapScreen extends AbstractContainerScreen<SpeedCapMenu> {
 
     @Override
     public void onClose() {
-        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-        for (CapSlider slider : sliderWidgets) {
-            buf.writeFloat(Math.max(slider.getSpeed() - .5f, 0.1f));
-        }
-        for (CapScreenButton button : buttonWidgets) {
-            buf.writeBoolean(button.isSelected());
-        }
-        PlatformSpecific.sendToServer(buf);
+        PlatformSpecific.sendToServer(sliderWidgets.get(0).getSpeed() - .5f,
+                sliderWidgets.get(1).getSpeed() - .5f, buttonWidgets.get(0).isSelected(), buttonWidgets.get(1).isSelected(),
+                buttonWidgets.get(2).isSelected(), buttonWidgets.get(3).isSelected(), buttonWidgets.get(4).isSelected(), buttonWidgets.get(5).isSelected());
         super.onClose();
     }
 
@@ -172,7 +149,7 @@ public class SpeedCapScreen extends AbstractContainerScreen<SpeedCapMenu> {
         private final boolean movementRelated;
         private final TextureAtlasSprite sprite;
 
-        public CapTabButton(int x, int y, MobEffect effect, Component name, boolean movementRelated) {
+        public CapTabButton(int x, int y, Holder<MobEffect> effect, Component name, boolean movementRelated) {
             super(x, y, 25, 25, name);
             this.movementRelated = movementRelated;
             this.sprite = Minecraft.getInstance().getMobEffectTextures().get(effect);
@@ -260,7 +237,9 @@ public class SpeedCapScreen extends AbstractContainerScreen<SpeedCapMenu> {
         }
 
         public void onDrag(double d, double e, double f, double g) {
-            super.onDrag(d, e, f, g);
+            if (this.isHovered) {
+                super.onDrag(d, e, f, g);
+            }
         }
 
         @Override

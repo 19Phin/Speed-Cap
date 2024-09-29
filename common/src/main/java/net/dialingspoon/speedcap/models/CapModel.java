@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.dialingspoon.speedcap.PlatformSpecific;
 import net.dialingspoon.speedcap.SpeedCap;
 import net.dialingspoon.speedcap.interfaces.LivingEntityInterface;
+import net.dialingspoon.speedcap.item.SpeedCapItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -17,16 +18,16 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.DyedItemColor;
 import org.joml.Vector3f;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class CapModel<T extends LivingEntity> extends HumanoidModel<T> {
-	public static final ResourceLocation TEXTURE = new ResourceLocation(SpeedCap.MOD_ID, "textures/models/armor/speed_cap_layer_1.png");
-	public static final ResourceLocation OVERLAY_TEXTURE = new ResourceLocation(SpeedCap.MOD_ID, "textures/models/armor/speed_cap_layer_1_overlay.png");
+	public static final ResourceLocation TEXTURE = ResourceLocation.tryBuild(SpeedCap.MOD_ID, "textures/models/armor/speed_cap_layer_1.png");
+	public static final ResourceLocation OVERLAY_TEXTURE = ResourceLocation.tryBuild(SpeedCap.MOD_ID, "textures/models/armor/speed_cap_layer_1_overlay.png");
 
     private final Map<String, ModelPart> modelParts;
 
@@ -135,7 +136,7 @@ public class CapModel<T extends LivingEntity> extends HumanoidModel<T> {
 		contextModel.copyPropertiesTo((HumanoidModel<LivingEntity>)this);
 
 		setupAnim(livingEntity);
-		int i = ((DyeableLeatherItem)stack.getItem()).getColor(stack);
+		int i = DyedItemColor.getOrDefault(stack, SpeedCapItem.DEFAULT_COLOR);
 		float f = (float)(i >> 16 & 255) / 255.0F;
 		float f1 = (float)(i >> 8 & 255) / 255.0F;
 		float f2 = (float)(i & 255) / 255.0F;
@@ -171,24 +172,24 @@ public class CapModel<T extends LivingEntity> extends HumanoidModel<T> {
 			kf1 = kf2 = null;
 			for (KeyframeList.Keyframe frame : entry.getValue().positionKeyframes) {
 				if (kf2 != null) break;
-				kf1 = (kf1 == null || progress >= frame.getStartTime()) ? frame : kf1;
-				kf2 = progress < frame.getStartTime() ? frame : null;
+				kf1 = (kf1 == null || progress >= frame.startTime()) ? frame : kf1;
+				kf2 = progress < frame.startTime() ? frame : null;
 			}
 			applyInterpolation(part, progress, kf1, kf2, KeyframeList.Type.POSITION);
 
 			kf1 = kf2 = null;
 			for (KeyframeList.Keyframe frame : entry.getValue().rotationKeyframes) {
 				if (kf2 != null) break;
-				kf1 = (kf1 == null || progress >= frame.getStartTime()) ? frame : kf1;
-				kf2 = progress < frame.getStartTime() ? frame : null;
+				kf1 = (kf1 == null || progress >= frame.startTime()) ? frame : kf1;
+				kf2 = progress < frame.startTime() ? frame : null;
 			}
 			applyInterpolation(part, progress, kf1, kf2, KeyframeList.Type.ROTATION);
 
 			kf1 = kf2 = null;
 			for (KeyframeList.Keyframe frame : entry.getValue().scaleKeyframes) {
 				if (kf2 != null) break;
-				kf1 = (kf1 == null || progress >= frame.getStartTime()) ? frame : kf1;
-				kf2 = progress < frame.getStartTime() ? frame : null;
+				kf1 = (kf1 == null || progress >= frame.startTime()) ? frame : kf1;
+				kf2 = progress < frame.startTime() ? frame : null;
 			}
 			applyInterpolation(part, progress, kf1, kf2, KeyframeList.Type.SCALE);
 		}
@@ -197,11 +198,11 @@ public class CapModel<T extends LivingEntity> extends HumanoidModel<T> {
 	private static void applyInterpolation(ModelPart part, float progress, KeyframeList.Keyframe keyframe1, KeyframeList.Keyframe keyframe2, KeyframeList.Type type) {
 		if (keyframe1 != null) {
 			if (keyframe2 == null) {
-				setModelPartValue(part, keyframe1.getTransform(), type);
+				setModelPartValue(part, keyframe1.transform(), type);
 			} else {
-				float duration = keyframe2.getStartTime() - keyframe1.getStartTime();
-				float progressRatio = (progress - keyframe1.getStartTime()) / duration;
-				Vector3f interpolatedValue = interpolate(progressRatio, keyframe1.getTransform(), keyframe2.getTransform());
+				float duration = keyframe2.startTime() - keyframe1.startTime();
+				float progressRatio = (progress - keyframe1.startTime()) / duration;
+				Vector3f interpolatedValue = interpolate(progressRatio, keyframe1.transform(), keyframe2.transform());
 				setModelPartValue(part, interpolatedValue, type);
 			}
 		}

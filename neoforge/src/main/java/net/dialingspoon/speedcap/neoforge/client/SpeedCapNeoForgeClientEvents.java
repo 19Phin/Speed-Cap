@@ -2,9 +2,9 @@ package net.dialingspoon.speedcap.neoforge.client;
 
 import net.dialingspoon.speedcap.SpeedCap;
 import net.dialingspoon.speedcap.Util;
-import net.dialingspoon.speedcap.interfaces.EntityInterface;
-import net.dialingspoon.speedcap.item.SpeedCapItem;
 import net.dialingspoon.speedcap.models.CapModel;
+import net.dialingspoon.speedcap.neoforge.networking.CapKeybindPacket;
+import net.dialingspoon.speedcap.neoforge.networking.PacketHandler;
 import net.dialingspoon.speedcap.neoforge.registry.ModItems;
 import net.dialingspoon.speedcap.neoforge.registry.ModKeys;
 import net.minecraft.client.Minecraft;
@@ -13,9 +13,10 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
@@ -23,27 +24,27 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 
 @SuppressWarnings("unused")
 public class SpeedCapNeoForgeClientEvents {
-    @Mod.EventBusSubscriber(modid = SpeedCap.MOD_ID, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = SpeedCap.MOD_ID, value = Dist.CLIENT)
     public static class ClientNeoForgeEvents {
         @SubscribeEvent
         public static void onKey(InputEvent.Key event) {
             if (ModKeys.TOGGLE_SPEED.consumeClick()) {
                 ItemStack cap = Util.getActiveCap(Minecraft.getInstance().player);
                 if (!cap.isEmpty()) {
-                    ((EntityInterface) Minecraft.getInstance().player).speedcap$getData().putBoolean("moveActive", !((EntityInterface) Minecraft.getInstance().player).speedcap$getData().getBoolean("moveActive"));
+                    PacketHandler.sendToServer(new CapKeybindPacket(true));
                 }
             }
             if (ModKeys.TOGGLE_MINE.consumeClick()) {
                 ItemStack cap = Util.getActiveCap(Minecraft.getInstance().player);
                 if (!cap.isEmpty()) {
-                    ((EntityInterface) Minecraft.getInstance().player).speedcap$getData().putBoolean("mineActive", ((EntityInterface) Minecraft.getInstance().player).speedcap$getData().getBoolean("mineActive"));
+                    PacketHandler.sendToServer(new CapKeybindPacket(false));
                 }
             }
         }
     }
 
 
-    @Mod.EventBusSubscriber(modid = SpeedCap.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(modid = SpeedCap.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
     public static class ClientModBusEvents {
         private static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(SpeedCap.MOD_ID, "speedcap"), "main");
 
@@ -61,7 +62,7 @@ public class SpeedCapNeoForgeClientEvents {
 
         @SubscribeEvent
         public static void initColors(RegisterColorHandlersEvent.Item event) {
-            event.register((itemStack, layer) -> layer > 0 ? -1 : ((SpeedCapItem) itemStack.getItem()).getColor(itemStack), ModItems.SPEEDCAP.get());
+            event.register((itemStack, layer) -> layer > 0 ? -1 : DyedItemColor.getOrDefault(itemStack, ModItems.SPEEDCAP.get().DEFAULT_COLOR), ModItems.SPEEDCAP);
         }
 
         @SubscribeEvent

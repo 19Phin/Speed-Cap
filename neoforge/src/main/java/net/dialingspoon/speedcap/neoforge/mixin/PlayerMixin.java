@@ -2,8 +2,8 @@ package net.dialingspoon.speedcap.neoforge.mixin;
 
 import net.dialingspoon.speedcap.Util;
 import net.dialingspoon.speedcap.interfaces.EntityInterface;
+import net.dialingspoon.speedcap.item.CapSettingsComponent;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,9 +18,9 @@ public class PlayerMixin {
     @Inject(method = "getDigSpeed", at = @At(value = "RETURN"), cancellable = true, remap = false)
     private void slowDestroy(BlockState arg, BlockPos pos, CallbackInfoReturnable<Float> cir) {
         ItemStack cap = Util.getActiveCap((Player)(Object)this);
-        CompoundTag data = ((EntityInterface) this).speedcap$getData();
-        if (!cap.isEmpty() && data.getBoolean("mineActive") && !data.getBoolean("creative")) {
-            cir.setReturnValue( Math.min(cir.getReturnValue(), data.getFloat("mineSpeed")) );
+        CapSettingsComponent data = ((EntityInterface) this).speedcap$getData();
+        if (!cap.isEmpty() && data.mineActive() && !data.creative()) {
+            cir.setReturnValue( Math.min(cir.getReturnValue(), data.mineSpeed()) );
         }
     }
 }

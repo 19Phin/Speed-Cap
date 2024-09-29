@@ -2,7 +2,6 @@ package net.dialingspoon.speedcap;
 
 import net.dialingspoon.speedcap.interfaces.EntityInterface;
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -28,20 +27,7 @@ public class Util {
             if (entityInterface.speedcap$getCapStack() != item) {
                 entityInterface.speedcap$setCapStack(item);
 
-                if (!item.getOrCreateTag().contains("SpeedCap")) {
-                    CompoundTag tag = new CompoundTag();
-                    tag.putFloat("moveSpeed", 4.8f);
-                    tag.putFloat("mineSpeed", 4);
-                    tag.putBoolean("moveActive", true);
-                    tag.putBoolean("modifiable", false);
-                    tag.putBoolean("jump", true);
-                    tag.putBoolean("stoponadime", false);
-                    tag.putBoolean("mineActive", true);
-                    tag.putBoolean("creative", true);
-                    item.getTag().put("SpeedCap", tag);
-                }
-
-                entityInterface.speedcap$setData(item.getOrCreateTag().getCompound("SpeedCap"));
+                entityInterface.speedcap$setData(item.get(PlatformSpecific.getDataComponent()));
             }
         }
 

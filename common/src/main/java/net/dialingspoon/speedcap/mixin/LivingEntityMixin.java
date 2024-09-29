@@ -3,7 +3,7 @@ package net.dialingspoon.speedcap.mixin;
 import net.dialingspoon.speedcap.Util;
 import net.dialingspoon.speedcap.interfaces.EntityInterface;
 import net.dialingspoon.speedcap.interfaces.LivingEntityInterface;
-import net.minecraft.nbt.CompoundTag;
+import net.dialingspoon.speedcap.item.CapSettingsComponent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
@@ -50,8 +50,8 @@ public class LivingEntityMixin implements LivingEntityInterface {
     @Redirect(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;setDeltaMovement(DDD)V"))
     private void stoponadime(LivingEntity instance, double x, double y, double z) {
         ItemStack cap = Util.getActiveCap(instance);
-        CompoundTag data = ((EntityInterface) instance).speedcap$getData();
-        if (!cap.isEmpty() && data.getBoolean("moveActive") && data.getBoolean("stoponadime")) {
+        CapSettingsComponent data = ((EntityInterface) instance).speedcap$getData();
+        if (!cap.isEmpty() && data.moveActive() && data.stoponadime()) {
             if (this.xxa == 0.0f && this.zza == 0.0f) {
                 instance.setDeltaMovement(0, y, 0);
             }
@@ -66,8 +66,8 @@ public class LivingEntityMixin implements LivingEntityInterface {
 
         if (Util.shouldHandleSelf(entity)) {
             ItemStack cap = Util.getActiveCap(entity);
-            CompoundTag data = ((EntityInterface) entity).speedcap$getData();
-            ((EntityInterface) entity).speedcap$moving(!cap.isEmpty() && data.getBoolean("moveActive") && data.getBoolean("modifiable") && !(vec3.x == 0 && vec3.z == 0));
+            CapSettingsComponent data = ((EntityInterface) entity).speedcap$getData();
+            ((EntityInterface) entity).speedcap$moving(!cap.isEmpty() && data.moveActive() && data.modifiable() && !(vec3.x == 0 && vec3.z == 0));
         }
     }
 
@@ -76,12 +76,16 @@ public class LivingEntityMixin implements LivingEntityInterface {
         float speed = cir.getReturnValue();
         EntityInterface entity = (EntityInterface) this;
         ItemStack cap = Util.getActiveCap((LivingEntity)(Object)this);
-        CompoundTag data = entity.speedcap$getData();
+        CapSettingsComponent data = entity.speedcap$getData();
 
-        float maxSpeed = data.getFloat("moveSpeed") / 44f;
-        if (!cap.isEmpty() && data.getBoolean("moveActive") && data.getBoolean("modifiable") && speed > maxSpeed) {
-            speed = maxSpeed;
-            entity.speedcap$couldSpeed(true);
+        if (!cap.isEmpty()) {
+            float maxSpeed = data.moveSpeed() / 44f;
+            if (data.moveActive() && data.modifiable() && speed > maxSpeed) {
+                speed = maxSpeed;
+                entity.speedcap$couldSpeed(true);
+            } else {
+                entity.speedcap$couldSpeed(false);
+            }
         } else {
             entity.speedcap$couldSpeed(false);
         }

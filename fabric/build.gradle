@@ -60,3 +60,7 @@ shadowJar {
 remapJar {
     input.set shadowJar.archiveFile
 }
+
+loom {
+    accessWidenerPath= file("src/main/resources/speedcap.accesswidener")
+}

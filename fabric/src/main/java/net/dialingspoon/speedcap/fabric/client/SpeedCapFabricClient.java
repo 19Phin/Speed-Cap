@@ -14,9 +14,10 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.component.DyedItemColor;
 
 public final class SpeedCapFabricClient implements ClientModInitializer {
-    public static final ModelLayerLocation CAP_LAYER = new ModelLayerLocation(new ResourceLocation(SpeedCap.MOD_ID, "speedcap"), "main");
+    public static final ModelLayerLocation CAP_LAYER = new ModelLayerLocation(ResourceLocation.tryBuild(SpeedCap.MOD_ID, "speedcap"), "main");
 
     @Override
     public void onInitializeClient() {
@@ -28,6 +29,6 @@ public final class SpeedCapFabricClient implements ClientModInitializer {
             TrinketRenderer.register();
         }
 
-        ColorProviderRegistry.ITEM.register((itemStack, layer) -> layer > 0 ? -1 : ((SpeedCapItem)itemStack.getItem()).getColor(itemStack), ModItems.SPEEDCAP);
+        ColorProviderRegistry.ITEM.register((itemStack, layer) -> layer > 0 ? -1 : DyedItemColor.getOrDefault(itemStack, SpeedCapItem.DEFAULT_COLOR));
     }
 }

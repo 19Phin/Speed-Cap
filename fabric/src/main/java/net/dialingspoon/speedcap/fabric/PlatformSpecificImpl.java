@@ -3,12 +3,15 @@ package net.dialingspoon.speedcap.fabric;
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketsApi;
 import net.dialingspoon.speedcap.fabric.networking.Packets;
+import net.dialingspoon.speedcap.fabric.networking.ServerboundCapSettingsPacket;
+import net.dialingspoon.speedcap.fabric.registry.ModDataComponents;
 import net.dialingspoon.speedcap.fabric.registry.ModItems;
 import net.dialingspoon.speedcap.fabric.registry.ModMenuTypes;
 import net.dialingspoon.speedcap.fabric.registry.ModRecipes;
 import net.dialingspoon.speedcap.gui.SpeedCapMenu;
 import net.dialingspoon.speedcap.item.CapRecipe;
-import net.minecraft.network.FriendlyByteBuf;
+import net.dialingspoon.speedcap.item.CapSettingsComponent;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.inventory.MenuType;
@@ -29,8 +32,9 @@ public class PlatformSpecificImpl {
         return ItemStack.EMPTY;
     }
 
-    public static void sendToServer(FriendlyByteBuf buf) {
-        Packets.sendToServer(buf);
+    public static void sendToServer(float moveSpeed, float mineSpeed, boolean moveActive, boolean modifiable,
+                                    boolean jump, boolean stoponadime, boolean mineActive, boolean creative) {
+        Packets.sendToServer(new ServerboundCapSettingsPacket(moveSpeed, mineSpeed, moveActive, modifiable, jump, stoponadime, mineActive, creative));
     }
 
     public static Item getItem() {
@@ -43,5 +47,9 @@ public class PlatformSpecificImpl {
 
     public static RecipeSerializer<CapRecipe> getRecipeSerializer() {
         return ModRecipes.CAP_RECIPE;
+    }
+
+    public static DataComponentType<CapSettingsComponent> getDataComponent() {
+        return ModDataComponents.SPEEDCAP_DATA;
     }
 }

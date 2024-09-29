@@ -2,12 +2,11 @@ package net.dialingspoon.speedcap.mixin;
 
 import net.dialingspoon.speedcap.Util;
 import net.dialingspoon.speedcap.interfaces.EntityInterface;
-import net.minecraft.nbt.CompoundTag;
+import net.dialingspoon.speedcap.item.CapSettingsComponent;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -18,9 +17,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin implements EntityInterface {
@@ -44,7 +42,7 @@ public abstract class EntityMixin implements EntityInterface {
     @Unique
     private ItemStack speedcap$cap;
     @Unique
-    private CompoundTag speedcap$data;
+    private CapSettingsComponent speedcap$data;
 
     @Override
     public boolean speedcap$isSpeeding() {
@@ -65,11 +63,11 @@ public abstract class EntityMixin implements EntityInterface {
     }
 
     @Override
-    public void speedcap$setData(CompoundTag tag) {
-        speedcap$data = tag;
+    public void speedcap$setData(CapSettingsComponent settings) {
+        speedcap$data = settings;
     }
     @Override
-    public CompoundTag speedcap$getData() {
+    public CapSettingsComponent speedcap$getData() {
         return this.speedcap$data;
     }
     @Override
@@ -94,11 +92,11 @@ public abstract class EntityMixin implements EntityInterface {
                 }
 
                 ItemStack cap = Util.getActiveCap(entity);
-                if (!cap.isEmpty() && speedcap$data.getBoolean("moveActive")) {
+                if (!cap.isEmpty() && speedcap$data.moveActive()) {
                     Vector3d modifiedVec = new Vector3d(vec3.x, 0, vec3.z);
 
-                    float f = speedcap$data.getFloat("moveSpeed") / 20.5f;
-                    if (speedcap$data.getBoolean("modifiable")) {
+                    float f = speedcap$data.moveSpeed() / 20.5f;
+                    if (speedcap$data.modifiable()) {
                         if(speedcap$couldSpeed && speedcap$moving) {
                             speedcap$setSpeeding(true);
                         }
@@ -109,7 +107,7 @@ public abstract class EntityMixin implements EntityInterface {
                     }
 
                     double cappedY = vec3.y;
-                    if (speedcap$data.getBoolean("jump")) {
+                    if (speedcap$data.jump()) {
                         cappedY = Math.min(vec3.y, .44);
                         if (vec3.y != cappedY) {
                             speedcap$setSpeeding(true);
@@ -122,8 +120,10 @@ public abstract class EntityMixin implements EntityInterface {
         return vec3;
     }
 
-    @Inject(at = @At(value = "RETURN"), method = "<init>")
-    private void syncSpeeding(EntityType entityType, Level level, CallbackInfo ci) {
-        this.entityData.define(DATA_SPEEDING, false);
+    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/network/syncher/SynchedEntityData$Builder;define(Lnet/minecraft/network/syncher/EntityDataAccessor;Ljava/lang/Object;)Lnet/minecraft/network/syncher/SynchedEntityData$Builder;", ordinal = 7), method = "<init>")
+    private <T>SynchedEntityData.Builder syncSpeeding(SynchedEntityData.Builder instance, EntityDataAccessor<T> entityDataAccessor, T object) {
+        instance.define(entityDataAccessor, object);
+        instance.define(DATA_SPEEDING, false);
+        return instance;
     }
 }

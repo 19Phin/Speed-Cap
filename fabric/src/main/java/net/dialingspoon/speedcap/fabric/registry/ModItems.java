@@ -7,10 +7,9 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.Item;
 
 public class ModItems {
-    public static final SpeedCapItem SPEEDCAP = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(SpeedCap.MOD_ID, "speed_cap"), new SpeedCapItem(ModMaterials.SPEEDCAP, ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final SpeedCapItem SPEEDCAP = Registry.register(BuiltInRegistries.ITEM, ResourceLocation.tryBuild(SpeedCap.MOD_ID, "speed_cap"), new SpeedCapItem(ModMaterials.SPEEDCAP, ArmorItem.Type.HELMET, SpeedCapItem.DEFAULT_PROPERTIES));
 
     public static void register() {}
 }

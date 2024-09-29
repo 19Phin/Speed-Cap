@@ -1,13 +1,15 @@
 package net.dialingspoon.speedcap.item;
 
 import net.dialingspoon.speedcap.PlatformSpecific;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -62,7 +64,7 @@ public class CapRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer recipeInputInventory, RegistryAccess wrapperLookup) {
+    public ItemStack assemble(CraftingContainer recipeInputInventory, HolderLookup.Provider provider) {
         ItemStack carpet = recipeInputInventory.getItems().stream().filter(m -> m.is(ItemTags.WOOL_CARPETS)).findFirst().get();
         ItemStack cap = new ItemStack(PlatformSpecific.getItem());
 
@@ -74,7 +76,7 @@ public class CapRecipe extends CustomRecipe {
 
         int color = (r << 16) | (g << 8) | b;
 
-        ((SpeedCapItem)PlatformSpecific.getItem()).setColor(cap, color);
+        cap.set(DataComponents.DYED_COLOR, new DyedItemColor(color, true));
         return cap;
     }
 

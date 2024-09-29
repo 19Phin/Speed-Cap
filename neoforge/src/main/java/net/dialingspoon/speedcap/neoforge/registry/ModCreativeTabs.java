@@ -1,11 +1,13 @@
 package net.dialingspoon.speedcap.neoforge.registry;
 
 import net.dialingspoon.speedcap.SpeedCap;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -16,9 +18,21 @@ public class ModCreativeTabs {
             .title(Component.translatable("creativetab.speedcap_tab"))
             .displayItems((pParameters, pOutput) -> {
                 pOutput.accept(new ItemStack(ModItems.SPEEDCAP.get()));
-                for (int i = 1; i < DyeColor.PRE_BUILT_MAP_THRESHOLD; i++) {
-                    pOutput.accept(createColoredCap(DyeColor.byId(i)));
-                }
+                createColoredCap(DyeColor.LIGHT_GRAY);
+                createColoredCap(DyeColor.GRAY);
+                createColoredCap(DyeColor.BLACK);
+                createColoredCap(DyeColor.BROWN);
+                createColoredCap(DyeColor.RED);
+                createColoredCap(DyeColor.ORANGE);
+                createColoredCap(DyeColor.YELLOW);
+                createColoredCap(DyeColor.LIME);
+                createColoredCap(DyeColor.GREEN);
+                createColoredCap(DyeColor.CYAN);
+                createColoredCap(DyeColor.LIGHT_BLUE);
+                createColoredCap(DyeColor.BLUE);
+                createColoredCap(DyeColor.PURPLE);
+                createColoredCap(DyeColor.MAGENTA);
+                createColoredCap(DyeColor.PINK);
             })
             .build());
 
@@ -35,7 +49,7 @@ public class ModCreativeTabs {
         int b = (int) (textureDiffuseColors[2] * 255.0F);
 
         int colorhash = (r << 16) | (g << 8) | b;
-        ModItems.SPEEDCAP.get().setColor(cap, colorhash);
+        cap.set(DataComponents.DYED_COLOR, new DyedItemColor(colorhash, true));
         return cap;
     }
 }
