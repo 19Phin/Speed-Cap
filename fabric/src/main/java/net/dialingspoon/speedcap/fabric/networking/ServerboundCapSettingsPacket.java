@@ -60,7 +60,7 @@ public record ServerboundCapSettingsPacket(float moveSpeed, float mineSpeed, boo
             cap = player.getItemInHand(InteractionHand.OFF_HAND);
             if (!cap.is(ModItems.SPEEDCAP)) return;
         }
-        cap.set(ModDataComponents.SPEEDCAP_DATA, new CapSettingsComponent(packet.mineSpeed(), packet.moveSpeed(), packet.moveActive(), packet.modifiable(), packet.jump(), packet.stoponadime(), packet.mineActive(), packet.creative()));
+        cap.set(ModDataComponents.SPEEDCAP_DATA, new CapSettingsComponent(packet.moveSpeed(), packet.mineSpeed(), packet.moveActive(), packet.modifiable(), packet.jump(), packet.stoponadime(), packet.mineActive(), packet.creative()));
     }
 
     @Override

@@ -14,7 +14,6 @@ import net.dialingspoon.speedcap.neoforge.registry.ModRecipes;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import top.theillusivec4.curios.api.CuriosApi;
