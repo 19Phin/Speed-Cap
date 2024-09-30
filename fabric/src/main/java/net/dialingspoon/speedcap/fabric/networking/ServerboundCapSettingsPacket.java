@@ -13,7 +13,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 
 public class ServerboundCapSettingsPacket {
-    public static final ResourceLocation ID = new ResourceLocation(SpeedCap.MOD_ID, "cap_menu");
+    public static final ResourceLocation ID = ResourceLocation.tryBuild(SpeedCap.MOD_ID, "cap_menu");
 
     public static void receive(MinecraftServer client, ServerPlayer player, ServerPacketListener handler,
                                FriendlyByteBuf buf, PacketSender responseSender) {

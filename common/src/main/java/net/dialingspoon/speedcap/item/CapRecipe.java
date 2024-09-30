@@ -74,7 +74,7 @@ public class CapRecipe extends CustomRecipe {
 
         int color = (r << 16) | (g << 8) | b;
 
-        ((SpeedCapItem)PlatformSpecific.getItem()).setColor(cap, color);
+        PlatformSpecific.getItem().setColor(cap, color);
         return cap;
     }
 

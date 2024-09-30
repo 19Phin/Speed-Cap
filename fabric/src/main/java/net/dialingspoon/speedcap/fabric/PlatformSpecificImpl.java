@@ -8,6 +8,7 @@ import net.dialingspoon.speedcap.fabric.registry.ModMenuTypes;
 import net.dialingspoon.speedcap.fabric.registry.ModRecipes;
 import net.dialingspoon.speedcap.gui.SpeedCapMenu;
 import net.dialingspoon.speedcap.item.CapRecipe;
+import net.dialingspoon.speedcap.item.SpeedCapItem;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.LivingEntity;
@@ -33,7 +34,7 @@ public class PlatformSpecificImpl {
         Packets.sendToServer(buf);
     }
 
-    public static Item getItem() {
+    public static SpeedCapItem getItem() {
         return ModItems.SPEEDCAP;
     }
 

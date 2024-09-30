@@ -29,7 +29,7 @@ import java.util.List;
 
 @Environment(value=EnvType.CLIENT)
 public class SpeedCapScreen extends AbstractContainerScreen<SpeedCapMenu> {
-    private static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(SpeedCap.MOD_ID,"textures/gui/cap_menu.png");
+    private static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.tryBuild(SpeedCap.MOD_ID,"textures/gui/cap_menu.png");
     private static final List<CapSlider> sliderWidgets = Lists.newArrayList();
     private static final List<CapScreenButton> buttonWidgets = Lists.newArrayList();
     private static CapResetButton resetWidget;

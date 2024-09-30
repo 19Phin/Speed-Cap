@@ -9,8 +9,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 
 public class ServerboundCapSettingsPacket {
-    private final float mineSpeed;
     private final float moveSpeed;
+    private final float mineSpeed;
     private final boolean moveActive;
     private final boolean modifiable;
     private final boolean jump;

@@ -16,9 +16,21 @@ public class ModCreativeTabs {
             .title(Component.translatable("creativetab.speedcap_tab"))
             .displayItems((pParameters, pOutput) -> {
                 pOutput.accept(new ItemStack(ModItems.SPEEDCAP.get()));
-                for (int i = 1; i < DyeColor.PRE_BUILT_MAP_THRESHOLD; i++) {
-                    pOutput.accept(createColoredCap(DyeColor.byId(i)));
-                }
+                pOutput.accept(createColoredCap(DyeColor.LIGHT_GRAY));
+                pOutput.accept(createColoredCap(DyeColor.GRAY));
+                pOutput.accept(createColoredCap(DyeColor.BLACK));
+                pOutput.accept(createColoredCap(DyeColor.BROWN));
+                pOutput.accept(createColoredCap(DyeColor.RED));
+                pOutput.accept(createColoredCap(DyeColor.ORANGE));
+                pOutput.accept(createColoredCap(DyeColor.YELLOW));
+                pOutput.accept(createColoredCap(DyeColor.LIME));
+                pOutput.accept(createColoredCap(DyeColor.GREEN));
+                pOutput.accept(createColoredCap(DyeColor.CYAN));
+                pOutput.accept(createColoredCap(DyeColor.LIGHT_BLUE));
+                pOutput.accept(createColoredCap(DyeColor.BLUE));
+                pOutput.accept(createColoredCap(DyeColor.PURPLE));
+                pOutput.accept(createColoredCap(DyeColor.MAGENTA));
+                pOutput.accept(createColoredCap(DyeColor.PINK));
             })
             .build());
 

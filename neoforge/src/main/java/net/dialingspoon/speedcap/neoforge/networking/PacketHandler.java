@@ -11,6 +11,11 @@ public class PacketHandler {
                 ServerboundCapSettingsPacket::new,
                 handler -> handler.server(ServerboundCapSettingsPacket::handle)
                 );
+        registrar.play(
+                CapKeybindPacket.ID,
+                CapKeybindPacket::new,
+                handler -> handler.server(CapKeybindPacket::handle)
+        );
     }
 
     public static void sendToServer(CustomPacketPayload message) {

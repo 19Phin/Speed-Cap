@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
 public class ServerboundCapSettingsPacket implements CustomPacketPayload {
-    public static final ResourceLocation ID = new ResourceLocation(SpeedCap.MOD_ID, "cap_menu");
+    public static final ResourceLocation ID = ResourceLocation.tryBuild(SpeedCap.MOD_ID, "cap_menu");
     private final float mineSpeed;
     private final float moveSpeed;
     private final boolean moveActive;
