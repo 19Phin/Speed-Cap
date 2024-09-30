@@ -2,9 +2,10 @@ package net.dialingspoon.speedcap.neoforge.client;
 
 import net.dialingspoon.speedcap.SpeedCap;
 import net.dialingspoon.speedcap.Util;
-import net.dialingspoon.speedcap.interfaces.EntityInterface;
 import net.dialingspoon.speedcap.item.SpeedCapItem;
 import net.dialingspoon.speedcap.models.CapModel;
+import net.dialingspoon.speedcap.neoforge.networking.CapKeybindPacket;
+import net.dialingspoon.speedcap.neoforge.networking.Packets;
 import net.dialingspoon.speedcap.neoforge.registry.ModItems;
 import net.dialingspoon.speedcap.neoforge.registry.ModKeys;
 import net.minecraft.client.Minecraft;
@@ -30,13 +31,13 @@ public class SpeedCapNeoForgeClientEvents {
             if (ModKeys.TOGGLE_SPEED.consumeClick()) {
                 ItemStack cap = Util.getActiveCap(Minecraft.getInstance().player);
                 if (!cap.isEmpty()) {
-                    ((EntityInterface) Minecraft.getInstance().player).speedcap$getData().putBoolean("moveActive", !((EntityInterface) Minecraft.getInstance().player).speedcap$getData().getBoolean("moveActive"));
+                    Packets.sendToServer(new CapKeybindPacket(true));
                 }
             }
             if (ModKeys.TOGGLE_MINE.consumeClick()) {
                 ItemStack cap = Util.getActiveCap(Minecraft.getInstance().player);
                 if (!cap.isEmpty()) {
-                    ((EntityInterface) Minecraft.getInstance().player).speedcap$getData().putBoolean("mineActive", ((EntityInterface) Minecraft.getInstance().player).speedcap$getData().getBoolean("mineActive"));
+                    Packets.sendToServer(new CapKeybindPacket(false));
                 }
             }
         }
@@ -45,7 +46,7 @@ public class SpeedCapNeoForgeClientEvents {
 
     @Mod.EventBusSubscriber(modid = SpeedCap.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class ClientModBusEvents {
-        private static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(SpeedCap.MOD_ID, "speedcap"), "main");
+        private static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.tryBuild(SpeedCap.MOD_ID, "speedcap"), "main");
 
         public static CapModel<LivingEntity> capModel = null;
 

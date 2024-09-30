@@ -16,7 +16,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;
 
 public final class SpeedCapFabricClient implements ClientModInitializer {
-    public static final ModelLayerLocation CAP_LAYER = new ModelLayerLocation(new ResourceLocation(SpeedCap.MOD_ID, "speedcap"), "main");
+    public static final ModelLayerLocation CAP_LAYER = new ModelLayerLocation(ResourceLocation.tryBuild(SpeedCap.MOD_ID, "speedcap"), "main");
 
     @Override
     public void onInitializeClient() {

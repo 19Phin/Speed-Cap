@@ -30,10 +30,14 @@ public class PlayerMixin {
         ItemStack cap = Util.getActiveCap(player);
         CompoundTag data = ((EntityInterface) player).speedcap$getData();
 
-        float maxSpeed = ((EntityInterface) player).speedcap$getData().getFloat("moveSpeed") / 44f;
-        if (!cap.isEmpty() && data.getBoolean("moveActive") && data.getBoolean("modifiable") && speed > maxSpeed) {
-            speed = maxSpeed;
-            ((EntityInterface) player).speedcap$couldSpeed(true);
+        if (!cap.isEmpty()) {
+            float maxSpeed = data.getFloat("moveSpeed") / 44f;
+            if (data.getBoolean("moveActive") && data.getBoolean("modifiable") && speed > maxSpeed) {
+                speed = maxSpeed;
+                ((EntityInterface) player).speedcap$couldSpeed(true);
+            } else {
+                ((EntityInterface) player).speedcap$couldSpeed(false);
+            }
         } else {
             ((EntityInterface) player).speedcap$couldSpeed(false);
         }

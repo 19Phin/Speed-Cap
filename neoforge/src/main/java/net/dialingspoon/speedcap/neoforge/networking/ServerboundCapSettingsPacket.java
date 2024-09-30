@@ -9,8 +9,8 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.NetworkEvent;
 
 public class ServerboundCapSettingsPacket {
-    private final float mineSpeed;
     private final float moveSpeed;
+    private final float mineSpeed;
     private final boolean moveActive;
     private final boolean modifiable;
     private final boolean jump;
@@ -48,7 +48,7 @@ public class ServerboundCapSettingsPacket {
                 cap = player.getItemInHand(InteractionHand.OFF_HAND);
                 if (!cap.is(ModItems.SPEEDCAP.get())) return;
             }
-            CompoundTag tag = cap.getTag().getCompound("SpeedCap");
+            CompoundTag tag = new CompoundTag();
             tag.putFloat("moveSpeed", moveSpeed);
             tag.putFloat("mineSpeed", mineSpeed);
             tag.putBoolean("moveActive", moveActive);
@@ -57,6 +57,7 @@ public class ServerboundCapSettingsPacket {
             tag.putBoolean("stoponadime", stoponadime);
             tag.putBoolean("mineActive", mineActive);
             tag.putBoolean("creative", creative);
+            cap.getOrCreateTag().put("SpeedCap", tag);
         });
     }
 }
