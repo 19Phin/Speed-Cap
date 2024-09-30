@@ -5,7 +5,6 @@ import net.dialingspoon.speedcap.fabric.SpeedCapFabric;
 import net.dialingspoon.speedcap.fabric.mixin.LayerDefinitionsAccessor;
 import net.dialingspoon.speedcap.fabric.registry.ModItems;
 import net.dialingspoon.speedcap.fabric.trinkets.TrinketRenderer;
-import net.dialingspoon.speedcap.item.SpeedCapItem;
 import net.dialingspoon.speedcap.models.CapModel;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
@@ -28,6 +27,6 @@ public final class SpeedCapFabricClient implements ClientModInitializer {
             TrinketRenderer.register();
         }
 
-        ColorProviderRegistry.ITEM.register((itemStack, layer) -> layer > 0 ? -1 : ((SpeedCapItem)itemStack.getItem()).getColor(itemStack), ModItems.SPEEDCAP);
+        ColorProviderRegistry.ITEM.register((itemStack, layer) -> layer > 0 ? -1 : ModItems.SPEEDCAP.getColor(itemStack), ModItems.SPEEDCAP);
     }
 }

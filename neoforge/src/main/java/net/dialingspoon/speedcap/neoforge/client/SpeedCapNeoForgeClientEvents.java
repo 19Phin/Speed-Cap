@@ -2,7 +2,6 @@ package net.dialingspoon.speedcap.neoforge.client;
 
 import net.dialingspoon.speedcap.SpeedCap;
 import net.dialingspoon.speedcap.Util;
-import net.dialingspoon.speedcap.item.SpeedCapItem;
 import net.dialingspoon.speedcap.models.CapModel;
 import net.dialingspoon.speedcap.neoforge.networking.CapKeybindPacket;
 import net.dialingspoon.speedcap.neoforge.networking.PacketHandler;
@@ -62,7 +61,7 @@ public class SpeedCapNeoForgeClientEvents {
 
         @SubscribeEvent
         public static void initColors(RegisterColorHandlersEvent.Item event) {
-            event.register((itemStack, layer) -> layer > 0 ? -1 : ((SpeedCapItem) itemStack.getItem()).getColor(itemStack), ModItems.SPEEDCAP.get());
+            event.register((itemStack, layer) -> layer > 0 ? -1 : ModItems.SPEEDCAP.get().getColor(itemStack), ModItems.SPEEDCAP.get());
         }
 
         @SubscribeEvent
