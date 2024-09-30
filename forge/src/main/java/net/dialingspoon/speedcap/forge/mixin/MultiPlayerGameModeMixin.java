@@ -30,7 +30,6 @@ public class MultiPlayerGameModeMixin {
     public void delayDestroy(BlockState blockstate1, PlayerInteractEvent.LeftClickBlock event, BlockPos arg, Direction arg2, int i, CallbackInfoReturnable<Packet> cir) {
         ItemStack cap = Util.getActiveCap(minecraft.player);
         CompoundTag data = ((EntityInterface) minecraft.player).speedcap$getData();
-        System.out.println(!cap.isEmpty() && data.getBoolean("mineActive") && data.getBoolean("creative"));
         if (!cap.isEmpty() && data.getBoolean("mineActive") && data.getBoolean("creative")) {
             destroyDelay = (int)((1 / data.getFloat("mineSpeed")) * 20);
         }

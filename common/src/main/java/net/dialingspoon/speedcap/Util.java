@@ -27,6 +27,7 @@ public class Util {
             EntityInterface entityInterface = (EntityInterface) entity;
             if (entityInterface.speedcap$getCapStack() != item) {
                 entityInterface.speedcap$setCapStack(item);
+
                 entityInterface.speedcap$setData(Util.getOrCreateTag(item));
             }
         }
