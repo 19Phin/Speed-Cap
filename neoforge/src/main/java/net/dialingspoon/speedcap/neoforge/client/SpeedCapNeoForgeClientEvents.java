@@ -62,7 +62,7 @@ public class SpeedCapNeoForgeClientEvents {
 
         @SubscribeEvent
         public static void initColors(RegisterColorHandlersEvent.Item event) {
-            event.register((itemStack, layer) -> layer > 0 ? -1 : ((SpeedCapItem) itemStack.getItem()).getColor(itemStack), ModItems.SPEEDCAP.get());
+            event.register((itemStack, layer) -> layer > 0 ? -1 :  ModItems.SPEEDCAP.get().getColor(itemStack), ModItems.SPEEDCAP.get());
         }
 
         @SubscribeEvent
