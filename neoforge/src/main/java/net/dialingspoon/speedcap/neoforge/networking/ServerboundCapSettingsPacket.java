@@ -13,8 +13,8 @@ import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
 public class ServerboundCapSettingsPacket implements CustomPacketPayload {
     public static final ResourceLocation ID = ResourceLocation.tryBuild(SpeedCap.MOD_ID, "cap_menu");
-    private final float mineSpeed;
     private final float moveSpeed;
+    private final float mineSpeed;
     private final boolean moveActive;
     private final boolean modifiable;
     private final boolean jump;
@@ -52,7 +52,7 @@ public class ServerboundCapSettingsPacket implements CustomPacketPayload {
             cap = player.getItemInHand(InteractionHand.OFF_HAND);
             if (!cap.is(ModItems.SPEEDCAP.get())) return;
         }
-        CompoundTag tag = cap.getTag().getCompound("SpeedCap");
+        CompoundTag tag = new CompoundTag();
         tag.putFloat("moveSpeed", packet.moveSpeed);
         tag.putFloat("mineSpeed", packet.mineSpeed);
         tag.putBoolean("moveActive", packet.moveActive);
@@ -61,6 +61,7 @@ public class ServerboundCapSettingsPacket implements CustomPacketPayload {
         tag.putBoolean("stoponadime", packet.stoponadime);
         tag.putBoolean("mineActive", packet.mineActive);
         tag.putBoolean("creative", packet.creative);
+        cap.getOrCreateTag().put("SpeedCap", tag);
     }
 
     @Override

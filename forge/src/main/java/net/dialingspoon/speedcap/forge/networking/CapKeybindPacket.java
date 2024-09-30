@@ -27,7 +27,7 @@ public class CapKeybindPacket {
         context.enqueueWork(() -> {
             Player player = context.getSender();
             ItemStack cap = Util.getActiveCap(player);
-            CompoundTag tag = cap.getTag().getCompound("SpeedCap");
+            CompoundTag tag = Util.getOrCreateTag(cap);
             tag.putBoolean("moveActive", tag.getBoolean("moveActive") != move);
             tag.putBoolean("mineActive", tag.getBoolean("mineActive") == move);
         });

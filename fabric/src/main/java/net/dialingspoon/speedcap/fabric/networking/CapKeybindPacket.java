@@ -19,7 +19,7 @@ public class CapKeybindPacket {
                                FriendlyByteBuf buf, PacketSender responseSender) {
         ItemStack cap = Util.getActiveCap(player);
         boolean move = buf.readBoolean();
-        CompoundTag tag = cap.getTag().getCompound("SpeedCap");
+        CompoundTag tag = Util.getOrCreateTag(cap);
         tag.putBoolean("moveActive", tag.getBoolean("moveActive") != move);
         tag.putBoolean("mineActive", tag.getBoolean("mineActive") == move);
     }

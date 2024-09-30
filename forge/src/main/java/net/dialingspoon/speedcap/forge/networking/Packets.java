@@ -15,7 +15,7 @@ public class Packets {
     }
 
     public static void registerPackets() {
-        SimpleChannel net = ChannelBuilder.named(new ResourceLocation(SpeedCap.MOD_ID, "main")).networkProtocolVersion(PROTOCOL_VERSION).acceptedVersions(Channel.VersionTest.exact(PROTOCOL_VERSION)).simpleChannel();
+        SimpleChannel net = ChannelBuilder.named(ResourceLocation.tryBuild(SpeedCap.MOD_ID, "main")).networkProtocolVersion(PROTOCOL_VERSION).acceptedVersions(Channel.VersionTest.exact(PROTOCOL_VERSION)).simpleChannel();
 
         INSTANCE = net;
         net.messageBuilder(ServerboundCapSettingsPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)

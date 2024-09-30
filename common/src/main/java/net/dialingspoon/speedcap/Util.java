@@ -27,21 +27,7 @@ public class Util {
             EntityInterface entityInterface = (EntityInterface) entity;
             if (entityInterface.speedcap$getCapStack() != item) {
                 entityInterface.speedcap$setCapStack(item);
-
-                if (!item.getOrCreateTag().contains("SpeedCap")) {
-                    CompoundTag tag = new CompoundTag();
-                    tag.putFloat("moveSpeed", 4.8f);
-                    tag.putFloat("mineSpeed", 4);
-                    tag.putBoolean("moveActive", true);
-                    tag.putBoolean("modifiable", false);
-                    tag.putBoolean("jump", true);
-                    tag.putBoolean("stoponadime", false);
-                    tag.putBoolean("mineActive", true);
-                    tag.putBoolean("creative", true);
-                    item.getTag().put("SpeedCap", tag);
-                }
-
-                entityInterface.speedcap$setData(item.getOrCreateTag().getCompound("SpeedCap"));
+                entityInterface.speedcap$setData(Util.getOrCreateTag(item));
             }
         }
 
@@ -56,5 +42,21 @@ public class Util {
             return player.equals(Minecraft.getInstance().player);
         }
         return false;
+    }
+
+    public static CompoundTag getOrCreateTag(ItemStack item) {
+        if (!item.getOrCreateTag().contains("SpeedCap")) {
+            CompoundTag tag = new CompoundTag();
+            tag.putFloat("moveSpeed", 4.8f);
+            tag.putFloat("mineSpeed", 4);
+            tag.putBoolean("moveActive", true);
+            tag.putBoolean("modifiable", false);
+            tag.putBoolean("jump", true);
+            tag.putBoolean("stoponadime", false);
+            tag.putBoolean("mineActive", true);
+            tag.putBoolean("creative", true);
+            item.getTag().put("SpeedCap", tag);
+        }
+        return item.getTag().getCompound("SpeedCap");
     }
 }

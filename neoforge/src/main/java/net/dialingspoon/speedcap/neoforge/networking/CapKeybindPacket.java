@@ -35,7 +35,6 @@ public class CapKeybindPacket implements CustomPacketPayload {
         tag.putBoolean("moveActive", tag.getBoolean("moveActive") != packet.move);
         tag.putBoolean("mineActive", tag.getBoolean("mineActive") == packet.move);
     }
-    //!if no active origionally
 
     @Override
     public ResourceLocation id() {
