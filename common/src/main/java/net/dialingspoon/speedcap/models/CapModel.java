@@ -10,21 +10,15 @@ import net.dialingspoon.speedcap.interfaces.LivingEntityInterface;
 import net.dialingspoon.speedcap.item.SpeedCapItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.armortrim.ArmorTrim;
 import net.minecraft.world.item.component.DyedItemColor;
 import org.joml.Vector3f;
 
@@ -150,8 +144,10 @@ public class CapModel<T extends LivingEntity> extends HumanoidModel<T> {
 		vertexConsumer = renderTypeBuffer.getBuffer(RenderType.armorCutoutNoCull(CapModel.OVERLAY_TEXTURE));
 		renderToBuffer(matrixStack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
 
-		vertexConsumer = renderTypeBuffer.getBuffer(RenderType.armorEntityGlint());
-		renderToBuffer(matrixStack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
+		if (stack.hasFoil()) {
+			vertexConsumer = renderTypeBuffer.getBuffer(RenderType.armorEntityGlint());
+			renderToBuffer(matrixStack, vertexConsumer, light, OverlayTexture.NO_OVERLAY);
+		}
 	}
 
 	public void setupAnim(LivingEntity livingEntity) {

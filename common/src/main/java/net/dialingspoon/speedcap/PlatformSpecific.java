@@ -4,10 +4,10 @@ import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.dialingspoon.speedcap.gui.SpeedCapMenu;
 import net.dialingspoon.speedcap.item.CapRecipe;
 import net.dialingspoon.speedcap.item.CapSettingsComponent;
+import net.dialingspoon.speedcap.item.SpeedCapItem;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 
@@ -29,7 +29,7 @@ public class PlatformSpecific {
     }
 
     @ExpectPlatform
-    public static Item getItem() {
+    public static SpeedCapItem getItem() {
         throw new AssertionError();
     }
 

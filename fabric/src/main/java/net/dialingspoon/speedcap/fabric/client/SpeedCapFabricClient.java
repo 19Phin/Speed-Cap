@@ -29,6 +29,6 @@ public final class SpeedCapFabricClient implements ClientModInitializer {
             TrinketRenderer.register();
         }
 
-        ColorProviderRegistry.ITEM.register((itemStack, layer) -> layer > 0 ? -1 : DyedItemColor.getOrDefault(itemStack, SpeedCapItem.DEFAULT_COLOR));
+        ColorProviderRegistry.ITEM.register((itemStack, layer) -> layer > 0 ? -1 : DyedItemColor.getOrDefault(itemStack, SpeedCapItem.DEFAULT_COLOR), ModItems.SPEEDCAP);
     }
 }
