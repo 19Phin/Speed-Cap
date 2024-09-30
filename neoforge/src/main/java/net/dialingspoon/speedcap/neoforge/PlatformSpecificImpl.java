@@ -3,6 +3,7 @@ package net.dialingspoon.speedcap.neoforge;
 import net.dialingspoon.speedcap.gui.SpeedCapMenu;
 import net.dialingspoon.speedcap.item.CapRecipe;
 import net.dialingspoon.speedcap.item.CapSettingsComponent;
+import net.dialingspoon.speedcap.item.SpeedCapItem;
 import net.dialingspoon.speedcap.neoforge.client.ItemExtension;
 import net.dialingspoon.speedcap.neoforge.networking.PacketHandler;
 import net.dialingspoon.speedcap.neoforge.networking.ServerboundCapSettingsPacket;
@@ -41,7 +42,7 @@ public class PlatformSpecificImpl {
         PacketHandler.sendToServer(new ServerboundCapSettingsPacket(moveSpeed, mineSpeed, moveActive, modifiable, jump, stoponadime, mineActive, creative));
     }
 
-    public static Item getItem() {
+    public static SpeedCapItem getItem() {
         return ModItems.SPEEDCAP.get();
     }
 

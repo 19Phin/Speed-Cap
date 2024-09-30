@@ -147,8 +147,10 @@ public class CapModel<T extends LivingEntity> extends HumanoidModel<T> {
 		vertexConsumer = renderTypeBuffer.getBuffer(RenderType.armorCutoutNoCull(CapModel.OVERLAY_TEXTURE));
 		renderToBuffer(matrixStack, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 1,1,1, 1.0F);
 
-		vertexConsumer = renderTypeBuffer.getBuffer(RenderType.armorEntityGlint());
-		renderToBuffer(matrixStack, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 1,1,1, 1.0F);
+		if (stack.hasFoil()) {
+			vertexConsumer = renderTypeBuffer.getBuffer(RenderType.armorEntityGlint());
+			renderToBuffer(matrixStack, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1.0F);
+		}
 	}
 
 	public void setupAnim(LivingEntity livingEntity) {
