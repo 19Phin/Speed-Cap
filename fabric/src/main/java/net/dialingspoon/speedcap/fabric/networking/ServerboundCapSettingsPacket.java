@@ -13,7 +13,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 
 public class ServerboundCapSettingsPacket {
-    public static final ResourceLocation ID = new ResourceLocation(SpeedCap.MOD_ID, "cap_menu");
+    public static final ResourceLocation ID = ResourceLocation.tryBuild(SpeedCap.MOD_ID, "cap_menu");
 
     public static void receive(MinecraftServer client, ServerPlayer player, ServerPacketListener handler,
                                FriendlyByteBuf buf, PacketSender responseSender) {
@@ -22,7 +22,7 @@ public class ServerboundCapSettingsPacket {
             cap = player.getItemInHand(InteractionHand.OFF_HAND);
             if (!cap.is(ModItems.SPEEDCAP)) return;
         }
-        CompoundTag tag = cap.getTag().getCompound("SpeedCap");
+        CompoundTag tag = new CompoundTag();
         tag.putFloat("moveSpeed", buf.readFloat());
         tag.putFloat("mineSpeed", buf.readFloat());
         tag.putBoolean("moveActive", buf.readBoolean());
@@ -31,5 +31,6 @@ public class ServerboundCapSettingsPacket {
         tag.putBoolean("stoponadime", buf.readBoolean());
         tag.putBoolean("mineActive", buf.readBoolean());
         tag.putBoolean("creative", buf.readBoolean());
+        cap.getOrCreateTag().put("SpeedCap", tag);
     }
 }

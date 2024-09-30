@@ -78,10 +78,14 @@ public class LivingEntityMixin implements LivingEntityInterface {
         ItemStack cap = Util.getActiveCap((LivingEntity)(Object)this);
         CompoundTag data = entity.speedcap$getData();
 
-        float maxSpeed = data.getFloat("moveSpeed") / 44f;
-        if (!cap.isEmpty() && data.getBoolean("moveActive") && data.getBoolean("modifiable") && speed > maxSpeed) {
-            speed = maxSpeed;
-            entity.speedcap$couldSpeed(true);
+        if (!cap.isEmpty()) {
+            float maxSpeed = data.getFloat("moveSpeed") / 44f;
+            if (data.getBoolean("moveActive") && data.getBoolean("modifiable") && speed > maxSpeed) {
+                speed = maxSpeed;
+                entity.speedcap$couldSpeed(true);
+            } else {
+                entity.speedcap$couldSpeed(false);
+            }
         } else {
             entity.speedcap$couldSpeed(false);
         }

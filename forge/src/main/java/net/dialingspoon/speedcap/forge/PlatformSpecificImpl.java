@@ -8,10 +8,10 @@ import net.dialingspoon.speedcap.forge.registry.ModMenuTypes;
 import net.dialingspoon.speedcap.forge.registry.ModRecipes;
 import net.dialingspoon.speedcap.gui.SpeedCapMenu;
 import net.dialingspoon.speedcap.item.CapRecipe;
+import net.dialingspoon.speedcap.item.SpeedCapItem;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -38,7 +38,7 @@ public class PlatformSpecificImpl {
         Packets.sendToServer(new ServerboundCapSettingsPacket(buf));
     }
 
-    public static Item getItem() {
+    public static SpeedCapItem getItem() {
         return ModItems.SPEEDCAP.get();
     }
 

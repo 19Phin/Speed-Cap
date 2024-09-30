@@ -28,6 +28,11 @@ public class Packets {
                 .encoder(ServerboundCapSettingsPacket::toBytes)
                 .consumerMainThread(ServerboundCapSettingsPacket::handle)
                 .add();
+        net.messageBuilder(CapKeybindPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(CapKeybindPacket::new)
+                .encoder(CapKeybindPacket::toBytes)
+                .consumerMainThread(CapKeybindPacket::handle)
+                .add();
     }
 
     public static <MSG> void sendToServer(MSG message) {

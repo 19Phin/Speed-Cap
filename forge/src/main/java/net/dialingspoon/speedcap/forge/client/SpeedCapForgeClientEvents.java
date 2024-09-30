@@ -2,9 +2,10 @@ package net.dialingspoon.speedcap.forge.client;
 
 import net.dialingspoon.speedcap.SpeedCap;
 import net.dialingspoon.speedcap.Util;
+import net.dialingspoon.speedcap.forge.networking.CapKeybindPacket;
+import net.dialingspoon.speedcap.forge.networking.Packets;
 import net.dialingspoon.speedcap.forge.registry.ModItems;
 import net.dialingspoon.speedcap.forge.registry.ModKeys;
-import net.dialingspoon.speedcap.interfaces.EntityInterface;
 import net.dialingspoon.speedcap.item.SpeedCapItem;
 import net.dialingspoon.speedcap.models.CapModel;
 import net.minecraft.client.Minecraft;
@@ -30,13 +31,13 @@ public class SpeedCapForgeClientEvents {
             if (ModKeys.TOGGLE_SPEED.consumeClick()) {
                 ItemStack cap = Util.getActiveCap(Minecraft.getInstance().player);
                 if (!cap.isEmpty()) {
-                    ((EntityInterface) Minecraft.getInstance().player).speedcap$getData().putBoolean("moveActive", !((EntityInterface) Minecraft.getInstance().player).speedcap$getData().getBoolean("moveActive"));
+                    Packets.sendToServer(new CapKeybindPacket(true));
                 }
             }
             if (ModKeys.TOGGLE_MINE.consumeClick()) {
                 ItemStack cap = Util.getActiveCap(Minecraft.getInstance().player);
                 if (!cap.isEmpty()) {
-                    ((EntityInterface) Minecraft.getInstance().player).speedcap$getData().putBoolean("mineActive", ((EntityInterface) Minecraft.getInstance().player).speedcap$getData().getBoolean("mineActive"));
+                    Packets.sendToServer(new CapKeybindPacket(false));
                 }
             }
         }
