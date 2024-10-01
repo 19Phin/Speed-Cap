@@ -27,6 +27,11 @@ public class PlatformSpecific {
     }
 
     @ExpectPlatform
+    public static void sendAnimToServer(boolean active) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
     public static SpeedCapItem getItem() {
         throw new AssertionError();
     }

@@ -2,7 +2,6 @@ package net.dialingspoon.speedcap.neoforge.client;
 
 import net.dialingspoon.speedcap.SpeedCap;
 import net.dialingspoon.speedcap.Util;
-import net.dialingspoon.speedcap.item.SpeedCapItem;
 import net.dialingspoon.speedcap.models.CapModel;
 import net.dialingspoon.speedcap.neoforge.networking.CapKeybindPacket;
 import net.dialingspoon.speedcap.neoforge.networking.Packets;

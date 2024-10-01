@@ -1,6 +1,7 @@
 package net.dialingspoon.speedcap.forge;
 
 import net.dialingspoon.speedcap.forge.client.ItemExtension;
+import net.dialingspoon.speedcap.forge.networking.CapAnimPacket;
 import net.dialingspoon.speedcap.forge.networking.Packets;
 import net.dialingspoon.speedcap.forge.networking.ServerboundCapSettingsPacket;
 import net.dialingspoon.speedcap.forge.registry.ModItems;
@@ -36,6 +37,10 @@ public class PlatformSpecificImpl {
 
     public static void sendToServer(FriendlyByteBuf buf) {
         Packets.sendToServer(new ServerboundCapSettingsPacket(buf));
+    }
+
+    public static void sendAnimToServer(boolean active) {
+        Packets.sendToServer(new CapAnimPacket(active));
     }
 
     public static SpeedCapItem getItem() {

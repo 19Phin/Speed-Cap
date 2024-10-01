@@ -4,6 +4,7 @@ import net.dialingspoon.speedcap.gui.SpeedCapMenu;
 import net.dialingspoon.speedcap.item.CapRecipe;
 import net.dialingspoon.speedcap.item.SpeedCapItem;
 import net.dialingspoon.speedcap.neoforge.client.ItemExtension;
+import net.dialingspoon.speedcap.neoforge.networking.CapAnimPacket;
 import net.dialingspoon.speedcap.neoforge.networking.Packets;
 import net.dialingspoon.speedcap.neoforge.networking.ServerboundCapSettingsPacket;
 import net.dialingspoon.speedcap.neoforge.registry.ModItems;
@@ -36,6 +37,10 @@ public class PlatformSpecificImpl {
 
     public static void sendToServer(FriendlyByteBuf buf) {
         Packets.sendToServer(new ServerboundCapSettingsPacket(buf));
+    }
+
+    public static void sendAnimToServer(boolean active) {
+        Packets.sendToServer(new CapAnimPacket(active));
     }
 
     public static SpeedCapItem getItem() {

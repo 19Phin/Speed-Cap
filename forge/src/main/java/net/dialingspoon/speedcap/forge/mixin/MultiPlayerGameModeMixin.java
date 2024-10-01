@@ -26,7 +26,8 @@ public class MultiPlayerGameModeMixin {
     @Shadow
     @Final private Minecraft minecraft;
 
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;destroyBlock(Lnet/minecraft/core/BlockPos;)Z"), method = {"lambda$startDestroyBlock$1"}, remap = false)
+    // Set 'remap = false' for testing
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;destroyBlock(Lnet/minecraft/core/BlockPos;)Z"), method = {"lambda$startDestroyBlock$1"}, remap = true)
     public void delayDestroy(BlockState blockstate1, PlayerInteractEvent.LeftClickBlock event, BlockPos arg, Direction arg2, int i, CallbackInfoReturnable<Packet> cir) {
         ItemStack cap = Util.getActiveCap(minecraft.player);
         CompoundTag data = ((EntityInterface) minecraft.player).speedcap$getData();
