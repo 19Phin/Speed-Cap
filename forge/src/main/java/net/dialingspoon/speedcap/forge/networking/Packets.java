@@ -33,6 +33,11 @@ public class Packets {
                 .encoder(CapKeybindPacket::toBytes)
                 .consumerMainThread(CapKeybindPacket::handle)
                 .add();
+        net.messageBuilder(CapAnimPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(CapAnimPacket::new)
+                .encoder(CapAnimPacket::toBytes)
+                .consumerMainThread(CapAnimPacket::handle)
+                .add();
     }
 
     public static <MSG> void sendToServer(MSG message) {
