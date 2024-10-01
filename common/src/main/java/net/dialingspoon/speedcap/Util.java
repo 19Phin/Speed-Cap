@@ -38,8 +38,7 @@ public class Util {
     public static boolean shouldHandleSelf(LivingEntity entity) {
         if (entity.level() instanceof ServerLevel) {
             return true;
-        }
-        if (entity instanceof Player player) {
+        } else if (entity instanceof Player player) {
             return player.equals(Minecraft.getInstance().player);
         }
         return false;

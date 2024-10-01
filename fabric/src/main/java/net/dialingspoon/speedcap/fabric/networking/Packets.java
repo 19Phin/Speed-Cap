@@ -10,6 +10,7 @@ public class Packets {
     public static void registerPackets() {
         ServerPlayNetworking.registerGlobalReceiver(ServerboundCapSettingsPacket.ID, ServerboundCapSettingsPacket::receive);
         ServerPlayNetworking.registerGlobalReceiver(CapKeybindPacket.ID, CapKeybindPacket::receive);
+        ServerPlayNetworking.registerGlobalReceiver(CapAnimPacket.ID, CapAnimPacket::receive);
     }
 
     public static void sendToServer(FriendlyByteBuf buf) {
@@ -20,5 +21,11 @@ public class Packets {
         FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
         buf.writeBoolean(move);
         ClientPlayNetworking.send(CapKeybindPacket.ID, buf);
+    }
+
+    public static void sendAnim(boolean active) {
+        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+        buf.writeBoolean(active);
+        ClientPlayNetworking.send(CapAnimPacket.ID, buf);
     }
 }

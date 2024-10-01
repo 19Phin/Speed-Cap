@@ -33,6 +33,10 @@ public class PlatformSpecificImpl {
         Packets.sendToServer(buf);
     }
 
+    public static void sendAnimToServer(boolean active) {
+        sendAnimToServer(active);
+    }
+
     public static SpeedCapItem getItem() {
         return ModItems.SPEEDCAP;
     }
