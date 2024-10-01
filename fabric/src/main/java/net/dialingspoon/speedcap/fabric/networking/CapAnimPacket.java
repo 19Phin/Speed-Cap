@@ -11,7 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class CapAnimPacket {
 
-    public static final ResourceLocation ID = ResourceLocation.tryBuild(SpeedCap.MOD_ID, "cap_key");
+    public static final ResourceLocation ID = ResourceLocation.tryBuild(SpeedCap.MOD_ID, "cap_anim");
 
     public static void receive(MinecraftServer client, ServerPlayer player, ServerPacketListener handler,
                                FriendlyByteBuf buf, PacketSender responseSender) {
