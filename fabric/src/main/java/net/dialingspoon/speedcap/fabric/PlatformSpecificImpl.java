@@ -37,6 +37,10 @@ public class PlatformSpecificImpl {
         Packets.sendToServer(new ServerboundCapSettingsPacket(moveSpeed, mineSpeed, moveActive, modifiable, jump, stoponadime, mineActive, creative));
     }
 
+    public static void sendAnimToServer(boolean active) {
+        sendAnimToServer(active);
+    }
+
     public static SpeedCapItem getItem() {
         return ModItems.SPEEDCAP;
     }

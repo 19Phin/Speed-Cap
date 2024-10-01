@@ -12,6 +12,8 @@ public class Packets {
         ServerPlayNetworking.registerGlobalReceiver(ServerboundCapSettingsPacket.TYPE, ServerboundCapSettingsPacket::handle);
         PayloadTypeRegistry.playC2S().register(CapKeybindPacket.TYPE, CapKeybindPacket.STREAM_CODEC);
         ServerPlayNetworking.registerGlobalReceiver(CapKeybindPacket.TYPE, CapKeybindPacket::handle);
+        PayloadTypeRegistry.playC2S().register(CapAnimPacket.TYPE, CapAnimPacket.STREAM_CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(CapAnimPacket.TYPE, CapAnimPacket::handle);
     }
 
     public static void sendToServer(CustomPacketPayload packet) {

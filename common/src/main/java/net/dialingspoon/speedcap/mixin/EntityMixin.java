@@ -1,5 +1,6 @@
 package net.dialingspoon.speedcap.mixin;
 
+import net.dialingspoon.speedcap.PlatformSpecific;
 import net.dialingspoon.speedcap.Util;
 import net.dialingspoon.speedcap.interfaces.EntityInterface;
 import net.dialingspoon.speedcap.item.CapSettingsComponent;
@@ -8,6 +9,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -38,6 +40,8 @@ public abstract class EntityMixin implements EntityInterface {
     private boolean speedcap$couldSpeed;
     @Unique
     private long speedcap$localTick;
+    @Unique
+    private boolean speedcap$clientSpeeding;
 
     @Unique
     private ItemStack speedcap$cap;
@@ -48,7 +52,7 @@ public abstract class EntityMixin implements EntityInterface {
     public boolean speedcap$isSpeeding() {
         return this.entityData.get(DATA_SPEEDING);
     }
-    @Unique
+    @Override
     public void speedcap$setSpeeding(boolean bl) {
         this.entityData.set(DATA_SPEEDING, bl);
     }
@@ -85,9 +89,19 @@ public abstract class EntityMixin implements EntityInterface {
         if ((Object)this instanceof LivingEntity entity) {
 
             if (Util.shouldHandleSelf(entity)) {
+                boolean client = entity instanceof Player;
+                boolean oldSpeeding = false;
+                if (client) {
+                    oldSpeeding = speedcap$clientSpeeding;
+                }
+
                 long gameTime = entity.level() != null ? entity.level().getGameTime() : 0;
                 if (speedcap$localTick != gameTime) {
-                    speedcap$setSpeeding(false);
+                    if (client) {
+                        speedcap$clientSpeeding = false;
+                    } else {
+                        speedcap$setSpeeding(false);
+                    }
                     speedcap$localTick = gameTime;
                 }
 
@@ -98,22 +112,40 @@ public abstract class EntityMixin implements EntityInterface {
                     float f = speedcap$data.moveSpeed() / 20.5f;
                     if (speedcap$data.modifiable()) {
                         if(speedcap$couldSpeed && speedcap$moving) {
-                            speedcap$setSpeeding(true);
+                            if (client) {
+                                speedcap$clientSpeeding = true;
+                            } else {
+                                speedcap$setSpeeding(true);
+                            }
                         }
 
                     } else if (modifiedVec.length() >= f) {
                         modifiedVec.normalize().mul(f);
-                        speedcap$setSpeeding(true);
+                        if (client) {
+                            speedcap$clientSpeeding = true;
+                        } else {
+                            speedcap$setSpeeding(true);
+                        }
                     }
 
                     double cappedY = vec3.y;
                     if (speedcap$data.jump()) {
                         cappedY = Math.min(vec3.y, .44);
                         if (vec3.y != cappedY) {
-                            speedcap$setSpeeding(true);
+                            if (client) {
+                                speedcap$clientSpeeding = true;
+                            } else {
+                                speedcap$setSpeeding(true);
+                            }
                         }
                     }
+                    if (client && oldSpeeding != speedcap$clientSpeeding) {
+                        PlatformSpecific.sendAnimToServer(speedcap$clientSpeeding);
+                    }
                     return new Vec3(modifiedVec.x, cappedY, modifiedVec.z);
+                }
+                if (client && oldSpeeding != speedcap$clientSpeeding) {
+                    PlatformSpecific.sendAnimToServer(speedcap$clientSpeeding);
                 }
             }
         }
