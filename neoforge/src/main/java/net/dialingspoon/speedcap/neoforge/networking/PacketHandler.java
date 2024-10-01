@@ -16,6 +16,11 @@ public class PacketHandler {
                 CapKeybindPacket.STREAM_CODEC,
                 CapKeybindPacket::handle
         );
+        registrar.playToServer(
+                CapAnimPacket.TYPE,
+                CapAnimPacket.STREAM_CODEC,
+                CapAnimPacket::handle
+        );
     }
 
     public static void sendToServer(CustomPacketPayload message) {

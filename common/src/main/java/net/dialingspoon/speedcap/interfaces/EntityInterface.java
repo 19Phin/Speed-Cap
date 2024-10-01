@@ -9,6 +9,8 @@ public interface EntityInterface {
 
     void speedcap$couldSpeed(boolean b);
 
+    void speedcap$setSpeeding(boolean bl);
+
     void speedcap$moving(boolean b);
 
     CapSettingsComponent speedcap$getData();
