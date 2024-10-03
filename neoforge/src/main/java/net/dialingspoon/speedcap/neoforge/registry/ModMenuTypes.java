@@ -2,10 +2,14 @@ package net.dialingspoon.speedcap.neoforge.registry;
 
 import net.dialingspoon.speedcap.SpeedCap;
 import net.dialingspoon.speedcap.gui.SpeedCapMenu;
+import net.dialingspoon.speedcap.gui.SpeedCapScreen;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
