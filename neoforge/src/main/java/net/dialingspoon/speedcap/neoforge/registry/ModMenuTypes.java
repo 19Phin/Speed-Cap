@@ -11,7 +11,13 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class ModMenuTypes {
     public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(Registries.MENU, SpeedCap.MOD_ID);
-    public static final DeferredHolder<MenuType<?>, MenuType<SpeedCapMenu>> SPEEDCAP = MENUS.register("speed_cap", () -> new MenuType<>(SpeedCapMenu::new, FeatureFlags.VANILLA_SET));
+    public static final DeferredHolder<MenuType<?>, MenuType<SpeedCapMenu>> SPEEDCAP = MENUS.register("speed_cap", () -> {
+        MenuType<SpeedCapMenu> menu = new MenuType<>(SpeedCapMenu::new, FeatureFlags.VANILLA_SET);
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            MenuScreens.register(menu, SpeedCapScreen::new);
+        }
+        return menu;
+    });
 
     public static void register(IEventBus eventBus) {
         MENUS.register(eventBus);
