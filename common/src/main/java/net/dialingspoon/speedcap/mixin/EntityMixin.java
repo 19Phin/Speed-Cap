@@ -92,7 +92,7 @@ public abstract class EntityMixin implements EntityInterface {
         if ((Object)this instanceof LivingEntity entity) {
 
             if (Util.shouldHandleSelf(entity)) {
-                boolean client = entity.level() instanceof ServerLevel;
+                boolean client = !(entity.level() instanceof ServerLevel);
                 boolean oldSpeeding = false;
                 if (client) {
                     oldSpeeding = speedcap$clientSpeeding;
