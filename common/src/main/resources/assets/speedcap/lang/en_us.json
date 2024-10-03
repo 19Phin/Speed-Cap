@@ -3,7 +3,7 @@
   "key.category.speedcap": "Speed Cap",
   "key.speedcap.speed": "Toggle Speed Cap",
   "key.speedcap.mine": "Toggle Mining Speed Cap",
-
+  "creativetab.speedcap_tab": "Speed Caps",
 
   "item.speedcap.gui.moveTab": "Movement",
   "item.speedcap.gui.mineTab": "Mining",
