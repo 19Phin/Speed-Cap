@@ -7,6 +7,7 @@ import net.dialingspoon.speedcap.item.CapSettingsComponent;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -89,7 +90,7 @@ public abstract class EntityMixin implements EntityInterface {
         if ((Object)this instanceof LivingEntity entity) {
 
             if (Util.shouldHandleSelf(entity)) {
-                boolean client = entity instanceof Player;
+                boolean client = !(entity.level() instanceof ServerLevel);
                 boolean oldSpeeding = false;
                 if (client) {
                     oldSpeeding = speedcap$clientSpeeding;
