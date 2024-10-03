@@ -2,11 +2,13 @@ package net.dialingspoon.speedcap.neoforge.client;
 
 import net.dialingspoon.speedcap.SpeedCap;
 import net.dialingspoon.speedcap.Util;
+import net.dialingspoon.speedcap.gui.SpeedCapScreen;
 import net.dialingspoon.speedcap.models.CapModel;
 import net.dialingspoon.speedcap.neoforge.networking.CapKeybindPacket;
 import net.dialingspoon.speedcap.neoforge.networking.PacketHandler;
 import net.dialingspoon.speedcap.neoforge.registry.ModItems;
 import net.dialingspoon.speedcap.neoforge.registry.ModKeys;
+import net.dialingspoon.speedcap.neoforge.registry.ModMenuTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -17,10 +19,7 @@ import net.minecraft.world.item.component.DyedItemColor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.InputEvent;
-import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
-import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.event.*;
 
 @SuppressWarnings("unused")
 public class SpeedCapNeoForgeClientEvents {
@@ -69,6 +68,11 @@ public class SpeedCapNeoForgeClientEvents {
         public static void initKeys(RegisterKeyMappingsEvent event) {
             event.register(ModKeys.TOGGLE_SPEED);
             event.register(ModKeys.TOGGLE_MINE);
+        }
+
+        @SubscribeEvent
+        public static void registerMenuScreen(RegisterMenuScreensEvent event) {
+            event.register(ModMenuTypes.SPEEDCAP.get(), SpeedCapScreen::new);
         }
     }
 }
