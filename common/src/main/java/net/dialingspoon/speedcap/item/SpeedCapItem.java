@@ -11,8 +11,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.DyeableArmorItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public class SpeedCapItem extends DyeableArmorItem {
@@ -46,5 +49,11 @@ public class SpeedCapItem extends DyeableArmorItem {
     @PlatformOnly({PlatformOnly.FORGE, "neoforge"})
     public void initializeClient(Consumer<Object> consumer) {
         consumer.accept(PlatformSpecific.itemExtension());
+    }
+
+    @Override
+    public void appendHoverText(ItemStack arg, @Nullable Level arg2, List<Component> list, TooltipFlag arg3) {
+        list.add(Component.translatable("tooltip.speedcap.speed_cap.tooltip"));
+        super.appendHoverText(arg, arg2, list, arg3);
     }
 }
