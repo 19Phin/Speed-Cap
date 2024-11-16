@@ -1,6 +1,5 @@
 package net.dialingspoon.speedcap.forge.registry;
 
-import net.dialingspoon.speedcap.PlatformSpecific;
 import net.dialingspoon.speedcap.SpeedCap;
 import net.dialingspoon.speedcap.gui.SpeedCapMenu;
 import net.dialingspoon.speedcap.gui.SpeedCapScreen;
