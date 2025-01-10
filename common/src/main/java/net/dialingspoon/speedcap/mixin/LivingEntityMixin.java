@@ -29,14 +29,14 @@ public class LivingEntityMixin implements LivingEntityInterface {
     @Unique
     boolean speedcap$sailDirection;
     @Unique
-    float speedcap$sailTick;
+    long speedcap$sailTick;
 
     @Override
     public boolean speedcap$sailDirection() {
         return speedcap$sailDirection;
     }
     @Override
-    public float speedcap$getSailTick() {
+    public long speedcap$getSailTick() {
         return speedcap$sailTick;
     }
 
@@ -79,7 +79,7 @@ public class LivingEntityMixin implements LivingEntityInterface {
         CompoundTag data = entity.speedcap$getData();
 
         if (!cap.isEmpty()) {
-            float maxSpeed = data.getFloat("moveSpeed") / 44f;
+            float maxSpeed = Math.max(data.getFloat("moveSpeed"), 0.1f) / 44f;
             if (data.getBoolean("moveActive") && data.getBoolean("modifiable") && speed > maxSpeed) {
                 speed = maxSpeed;
                 entity.speedcap$couldSpeed(true);
@@ -100,7 +100,7 @@ public class LivingEntityMixin implements LivingEntityInterface {
             boolean isSpeeding = ((EntityInterface) this).speedcap$isSpeeding();
 
             if (isSpeeding != speedcap$sailDirection) {
-                float tick = level.getGameTime();
+                long tick = level.getGameTime();
                 speedcap$sailTick = tick - (9 - Math.min((tick - speedcap$sailTick), 10));
                 speedcap$sailDirection = isSpeeding;
             }
