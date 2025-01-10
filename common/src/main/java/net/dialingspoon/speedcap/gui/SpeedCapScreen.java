@@ -55,10 +55,10 @@ public class SpeedCapScreen extends AbstractContainerScreen<SpeedCapMenu> {
     private void initControls() {
         CapSettingsComponent settings = this.getMenu().getCap().get(PlatformSpecific.getDataComponent());
 
-        addWidget(new CapResetButton(this.leftPos + 100, this.topPos - 19, Component.translatable("item.speedcap.gui.reset")));
+        addWidget(new CapResetButton(this.leftPos + 105, this.topPos - 19, Component.translatable("item.speedcap.gui.reset")));
 
-        addWidget(new CapSlider(this.leftPos + this.imageWidth/2 - 26, this.topPos - 18, settings.moveSpeed(), true));
-        addWidget(new CapSlider(this.leftPos + this.imageWidth/2 - 26, this.topPos - 18, settings.mineSpeed(), false));
+        addWidget(new CapSlider(this.leftPos + this.imageWidth/2 - 31, this.topPos - 18, settings.moveSpeed(), true));
+        addWidget(new CapSlider(this.leftPos + this.imageWidth/2 - 31, this.topPos - 18, settings.mineSpeed(), false));
 
         addWidget(new CapScreenButton(this.leftPos + 35, this.topPos + 28, Component.translatable("item.speedcap.gui.moveActive"), settings.moveActive(), true, Component.translatable("item.speedcap.gui.moveActiveDesc")));
         addWidget(new CapScreenButton(this.leftPos + 95, this.topPos + 28, Component.translatable("item.speedcap.gui.modifiable"), settings.modifiable(), true, Component.translatable("item.speedcap.gui.modifiableDesc")));
@@ -180,14 +180,15 @@ public class SpeedCapScreen extends AbstractContainerScreen<SpeedCapMenu> {
 
     @Environment(value=EnvType.CLIENT)
     static class CapSlider extends AbstractSliderButton implements VisibilityToggleable {
-        private float speed;
+        private float speedValue;
         private final boolean movementRelated;
         private int tick;
         private int moving;
+        private int increase;
 
-        public CapSlider(int x, int y, float speed, boolean movementRelated) {
-            super(x, y, 50, 20, Component.literal(String.format("%.1f", speed)), getFirstValue(speed));
-            this.speed = speed + .5f;
+        public CapSlider(int x, int y, float initialSpeed, boolean movementRelated) {
+            super(x, y, 60, 20, Component.literal(String.format("%.1f", initialSpeed)), getFirstValue(initialSpeed));
+            this.speedValue = initialSpeed + .5f;
             this.movementRelated = movementRelated;
             this.setTooltip(Tooltip.create(Component.translatable("item.speedcap.gui.bps")));
         }
@@ -200,7 +201,7 @@ public class SpeedCapScreen extends AbstractContainerScreen<SpeedCapMenu> {
 
         @Override
         protected void updateMessage() {
-            this.setMessage(Component.literal(String.valueOf(Math.max(Float.parseFloat(String.format("%.1f", speed - .5f)), 0.1f))));
+            this.setMessage(Component.literal(String.format("%.1f", Math.max(speedValue - .5f, 0.1f))));
         }
 
         @Override
@@ -214,13 +215,15 @@ public class SpeedCapScreen extends AbstractContainerScreen<SpeedCapMenu> {
                 moving = -1;
             } else {
                 moving = 0;
+                tick = 0;
+                increase = 0;
             }
 
-            speed = ((int) speed) + change;
+            speedValue = ((int) speedValue) + change;
         }
 
         public void reset() {
-            speed = movementRelated ? 5.3f :  5.0f;
+            speedValue = movementRelated ? 5.3f :  5.0f;
             value = movementRelated ? .3 : 0;
             moving = 0;
             updateMessage();
@@ -229,10 +232,12 @@ public class SpeedCapScreen extends AbstractContainerScreen<SpeedCapMenu> {
         public void onRelease() {
             if (moving != 0) {
                 moving = 0;
+                tick = 0;
+                increase = 0;
             }
-            if (speed <= 0.4f) {
+            if (speedValue <= 0.4f) {
                 value = 0.6f;
-                speed = 0.4f;
+                speedValue = 0.4f;
             }
         }
 
@@ -255,16 +260,27 @@ public class SpeedCapScreen extends AbstractContainerScreen<SpeedCapMenu> {
         public void tick() {
             tick++;
             if (tick >= 10) {
-                tick = 0;
-                if (moving != -1 || speed >= 0f) {
-                    speed += moving;
-                    updateMessage();
+                increase++;
+                if (increase >= 10) {
+                    moving *= 10;
+                    increase = 0;
                 }
+
+                if (moving > 0 && speedValue + moving > 1000000) {
+                    speedValue = 1000000.9f;
+                } else if (moving < 0 && speedValue + moving < 0) {
+                    speedValue = 0;
+                } else {
+                    speedValue += moving;
+                }
+
+                updateMessage();
+                tick = 0;
             }
         }
 
         public float getSpeed() {
-            return speed;
+            return speedValue;
         }
     }
 

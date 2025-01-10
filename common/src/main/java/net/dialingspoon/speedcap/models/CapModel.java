@@ -153,11 +153,13 @@ public class CapModel<T extends LivingEntity> extends HumanoidModel<T> {
 	public void setupAnim(LivingEntity livingEntity) {
 		head.visible = livingEntity.getSlot(103).get().isEmpty() || livingEntity.getSlot(103).get().is(PlatformSpecific.getItem());
 
-		float tick = Minecraft.getInstance().level.getGameTime() + Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(true);
 		LivingEntityInterface livingEntityMixin = (LivingEntityInterface)livingEntity;
+		long tick = Minecraft.getInstance().level.getGameTime();
+		float subTick = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(true);
+		long sailTick = livingEntityMixin.speedcap$getSailTick();
 
 		CapModel.runAnimation(livingEntityMixin.speedcap$sailDirection() ? ModelAnimations.OPEN : ModelAnimations.CLOSE, modelParts,
-				Math.min((tick - livingEntityMixin.speedcap$getSailTick()) / 10, 1));
+				Math.min((tick - sailTick + subTick) / 10, 1));
 	}
 
 	private static void runAnimation(Map<String, KeyframeList> animation, Map<String, ModelPart> parts, float progress) {

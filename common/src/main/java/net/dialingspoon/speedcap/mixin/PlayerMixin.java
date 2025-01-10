@@ -32,7 +32,7 @@ public class PlayerMixin {
         CapSettingsComponent data = ((EntityInterface) player).speedcap$getData();
 
         if (!cap.isEmpty()) {
-            float maxSpeed = data.moveSpeed() / 44f;
+            float maxSpeed = Math.max(data.moveSpeed(), 0.1f) / 44f;
             if (data.moveActive() && data.modifiable() && speed > maxSpeed) {
                 speed = maxSpeed;
                 ((EntityInterface) player).speedcap$couldSpeed(true);
