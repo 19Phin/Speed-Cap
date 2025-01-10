@@ -143,22 +143,24 @@ public class CapModel<T extends LivingEntity> extends HumanoidModel<T> {
 		renderToBuffer(matrixStack, vertexConsumer, light, OverlayTexture.NO_OVERLAY, f, f1, f2, 1.0F);
 
 		vertexConsumer = renderTypeBuffer.getBuffer(RenderType.armorCutoutNoCull(CapModel.OVERLAY_TEXTURE));
-		renderToBuffer(matrixStack, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 1,1,1, 1.0F);
+		renderToBuffer(matrixStack, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 1.0f,1.0f,1.0f, 1.0F);
 
 		if (stack.hasFoil()) {
 			vertexConsumer = renderTypeBuffer.getBuffer(RenderType.armorEntityGlint());
-			renderToBuffer(matrixStack, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1.0F);
+			renderToBuffer(matrixStack, vertexConsumer, light, OverlayTexture.NO_OVERLAY, 1.0f,1.0f,1.0f, 1.0F);
 		}
 	}
 
 	public void setupAnim(LivingEntity livingEntity) {
 		head.visible = livingEntity.getSlot(103).get().isEmpty() || livingEntity.getSlot(103).get().is(PlatformSpecific.getItem());
 
-		float tick = Minecraft.getInstance().level.getGameTime() + Minecraft.getInstance().getFrameTime();
 		LivingEntityInterface livingEntityMixin = (LivingEntityInterface)livingEntity;
+		long tick = Minecraft.getInstance().level.getGameTime();
+		float subTick = Minecraft.getInstance().getFrameTime();
+		long sailTick = livingEntityMixin.speedcap$getSailTick();
 
 		CapModel.runAnimation(livingEntityMixin.speedcap$sailDirection() ? ModelAnimations.OPEN : ModelAnimations.CLOSE, modelParts,
-				Math.min((tick - livingEntityMixin.speedcap$getSailTick()) / 10, 1));
+				Math.min((tick - sailTick + subTick) / 10, 1));
 	}
 
 	private static void runAnimation(Map<String, KeyframeList> animation, Map<String, ModelPart> parts, float progress) {

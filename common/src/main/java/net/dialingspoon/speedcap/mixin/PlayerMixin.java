@@ -31,7 +31,7 @@ public class PlayerMixin {
         CompoundTag data = ((EntityInterface) player).speedcap$getData();
 
         if (!cap.isEmpty()) {
-            float maxSpeed = data.getFloat("moveSpeed") / 44f;
+            float maxSpeed = Math.max(data.getFloat("moveSpeed"), 0.1f) / 44f;
             if (data.getBoolean("moveActive") && data.getBoolean("modifiable") && speed > maxSpeed) {
                 speed = maxSpeed;
                 ((EntityInterface) player).speedcap$couldSpeed(true);
